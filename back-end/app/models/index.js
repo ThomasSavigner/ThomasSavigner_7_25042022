@@ -27,5 +27,12 @@ sequelize.authenticate()
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.User = require("./user.model.js")(sequelize, Sequelize);
+db.User = require("./users.model.js")(sequelize, Sequelize);
+db.Role = require("./roles.model.js")(sequelize, Sequelize);
+db.Department = require("./departments.model.js")(sequelize, Sequelize);
+db.Post = require("./departments.model.js")(sequelize, Sequelize);
+db.Section = require("./sections.model.js")(sequelize, Sequelize);
+db.Comment = require("./comments.model.js")(sequelize, Sequelize);
+db.Reading = require("./readings.model.js")(sequelize, Sequelize);
+db.Like = require("./likes.model.js")(sequelize, Sequelize);
 module.exports = db;
