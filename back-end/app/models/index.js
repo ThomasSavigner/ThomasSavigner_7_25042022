@@ -1,7 +1,7 @@
 const dbConfig = require("../config/db.config");
 const Sequelize = require("sequelize");
 
-// connection
+// connection to db
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
@@ -27,5 +27,5 @@ sequelize.authenticate()
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-//db.user = require("./user.model.js")(sequelize, Sequelize);
+db.User = require("./user.model.js")(sequelize, Sequelize);
 module.exports = db;
