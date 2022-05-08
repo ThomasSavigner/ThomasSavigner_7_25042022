@@ -8,11 +8,11 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true,
         },
-        user_id: {
+        userID: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },
-        post_id: {
+        postID: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },

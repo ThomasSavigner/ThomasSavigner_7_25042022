@@ -30,8 +30,13 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        avatar: {
-            type: Sequelize.BLOB,
+        avatarUrl: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        roleID: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
         },
     });
     return User;

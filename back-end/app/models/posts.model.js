@@ -8,11 +8,11 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true,
         },
-        user_id: {
+        userID: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },
-        section_id: {
+        sectionID: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },
@@ -24,8 +24,8 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.TEXT('long'),
             allowNull: false,
         },
-        image: {
-            type: Sequelize.BLOB
+        imageUrl: {
+            type: Sequelize.STRING
         },
         readings: {
             type: Sequelize.INTEGER,

@@ -1,7 +1,10 @@
+
+//*****     Database parameters and structure     *****
+
 const dbConfig = require("../config/db.config");
 const Sequelize = require("sequelize");
 
-// connection to db
+//*** connection to db
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
@@ -14,7 +17,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   }
 });
 
-// test database connection
+//*** test database connection
 sequelize.authenticate()
   .then(() => {
     console.log('Connection to database has been established successfully.');
@@ -24,18 +27,48 @@ sequelize.authenticate()
   })
 ;
 
+//*** database structure
 const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.User = require("./users.model.js")(sequelize, Sequelize);
-db.Role = require("./roles.model.js")(sequelize, Sequelize);
-db.Department = require("./departments.model.js")(sequelize, Sequelize);
-db.Post = require("./posts.model.js")(sequelize, Sequelize);
-db.Section = require("./sections.model.js")(sequelize, Sequelize);
-db.Comment = require("./comments.model.js")(sequelize, Sequelize);
-db.Reading = require("./readings.model.js")(sequelize, Sequelize);
-db.Like = require("./likes.model.js")(sequelize, Sequelize);
+//* import of table models
+db.Users = require("./users.model")(sequelize, Sequelize);
+db.Roles = require("./roles.model")(sequelize, Sequelize);
+db.Departments = require("./departments.model")(sequelize, Sequelize);
+db.Posts = require("./posts.model")(sequelize, Sequelize);
+db.Sections = require("./sections.model")(sequelize, Sequelize);
+db.Comments = require("./comments.model")(sequelize, Sequelize);
+db.Readings = require("./readings.model")(sequelize, Sequelize);
+db.Likes = require("./likes.model")(sequelize, Sequelize);
+
+
+
+//* associations between tables
+
+//users-departments - 1:M association
+db.Departments.hasMany(db.Users, {
+  as: "dptUsers",
+  foreignKey: "departmentID",
+  }
+);
+db.Users.belongsTo(db.Departments, {
+  as: "department",
+  foreignKey: "departmentID",
+  }
+);
+
+// users-roles - 1:M association
+db.Roles.hasMany(db.Users, { 
+  as: "roleUsers",
+  foreignKey: "roleID",
+  }
+);
+db.Users.belongsTo(db.Roles, {
+  as: "role",
+  foreignKey: "roleID",
+  }
+);
 
 module.exports = db;
