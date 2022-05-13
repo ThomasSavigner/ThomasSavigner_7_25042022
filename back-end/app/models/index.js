@@ -35,14 +35,9 @@ db.sequelize = sequelize;
 
 //* import of table models
 db.Users = require("./users.model")(sequelize, Sequelize);
-db.Roles = require("./roles.model")(sequelize, Sequelize);
 db.Departments = require("./departments.model")(sequelize, Sequelize);
 db.Posts = require("./posts.model")(sequelize, Sequelize);
-db.Sections = require("./sections.model")(sequelize, Sequelize);
 db.Comments = require("./comments.model")(sequelize, Sequelize);
-db.Readings = require("./readings.model")(sequelize, Sequelize);
-db.Likes = require("./likes.model")(sequelize, Sequelize);
-
 
 
 //* associations between tables
@@ -59,16 +54,39 @@ db.Users.belongsTo(db.Departments, {
   }
 );
 
-// users-roles - 1:M association
-db.Roles.hasMany(db.Users, { 
-  as: "roleUsers",
-  foreignKey: "roleID",
+// users-posts - 1:M association
+db.Users.hasMany(db.Posts, {
+  as: "usrPosts",
+  foreignKey: "userID",
   }
 );
-db.Users.belongsTo(db.Roles, {
-  as: "role",
-  foreignKey: "roleID",
+db.Posts.belongsTo(db.Users, {
+  as: "userP",
+  foreignKey: "userID",
   }
 );
 
+//users-comments - 1:M association
+db.Users.hasMany(db.Comments, {
+  as: "usrComments",
+  foreignKey: "userID",
+  }
+);
+db.Comments.belongsTo(db.Users, {
+  as: "userC",
+  foreignKey: "userID",
+  }
+);
+
+//posts-comments - 1:M association
+db.Posts.hasMany(db.Comments, {
+  as: "pstComments",
+  foreignKey: "postID",
+  }
+);
+db.Comments.belongsTo(db.Posts, {
+  as: "postC",
+  foreignKey: "postID",
+  }
+);
 module.exports = db;

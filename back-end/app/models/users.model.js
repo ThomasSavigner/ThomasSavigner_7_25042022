@@ -32,10 +32,16 @@ module.exports = (sequelize, Sequelize) => {
         },
         avatarUrl: {
             type: Sequelize.STRING,
-            allowNull: true,
+            allowNull: false,
         },
-        roleID: {
-            type: Sequelize.INTEGER,
+        gotAdminAuthorization: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: true,
+            allowNull: false,
+        },
+        isAdmin: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
             allowNull: false,
         },
     });

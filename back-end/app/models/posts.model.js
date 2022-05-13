@@ -12,9 +12,12 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false,
         },
-        sectionID: {
-            type: Sequelize.INTEGER,
+        hashtags: {
+            type: Sequelize.STRING,
             allowNull: false,
+            set(val) {
+                this.setDataValue("hashtags", JSON.stringify([val], ","))
+            },
         },
         topic: {
             type: Sequelize.STRING,
@@ -31,9 +34,23 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
+        readers: {
+            type: Sequelize.STRING,
+            allowNull: true,
+            set(val) {
+                this.setDataValue("readers", JSON.stringify([val], ","))
+            },
+        },
         likes: {
             type: Sequelize.INTEGER,
             defaultValue: 0,
+        },
+        likers: {
+            type: Sequelize.STRING,
+            allowNull: true,
+            set(val) {
+                this.setDataValue("likers", JSON.stringify([val], ","))
+            },
         },    
         
     });
