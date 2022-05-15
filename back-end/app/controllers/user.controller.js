@@ -1,13 +1,14 @@
 
 // imports
 const bcrypt = require("bcrypt");
-const dotenv = require('dotenv');
-const jwt = require('jsonwebtoken');
+const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
+const fs =require("fs");
 
 const db = require("../models");
 const User = db.Users;
   
-// Set up Global configuration access
+//  Set up Global configuration access with isolated parameters
 dotenv.config();
 
 
@@ -54,6 +55,8 @@ exports.userSignup = (req, res) => {
 
 exports.userLogin = (req, res) => {
 
+
+
     User.findOne( {where: { email: req.body.email } } )
         .then( (user) => {
             
@@ -76,16 +79,33 @@ exports.userLogin = (req, res) => {
                     res.status(200).send({
                         statut: "Logged in user",
                         //  token generation
-                        token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' }),
-                    })
-
-                } )
+                        token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })},
+                    
+                )})
+                    
                 .catch(error => res.status(500).json({ error }));
 
-        } )
-};
-    
+         })
+}
 
+exports.deleteUserAccount = (req, res) => {
 
+    User.findOne( {where: {userID: req.auth.tokenUserId}})
+        .then( (user) => {
 
+            if (user.userID !== req.auth.tokenUserId) {
+                res.status(403).send("Unauthorized request !")
+            } else {
+
+                const filename = user.avatarUrl.split("/uploads/user-avatars/")[1]
+				
+				fs.unlink(`./uploads/user-avatars/${filename}`, () => {})
+				
+				User.destroy({where: {userID: req.auth.tokenUserId}})
+					.then(() => res.status(200).send("User Deleted"))
+					.catch((error) => res.status(500).send({error}))
+            }
+		})
+		.catch((error) => res.status(500).send({error}))
+}
 
