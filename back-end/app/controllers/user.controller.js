@@ -50,7 +50,7 @@ exports.userSignup = (req, res) => {
                 })
                 .catch(() => res.status(403).send("Problem: user already exist in database"))
         })
-};
+}
 
 exports.userLogin = (req, res) => {
 
@@ -63,6 +63,10 @@ exports.userLogin = (req, res) => {
                 return res.status(403).send("Access denied, please sign-up first")
             };
             
+            if (user.gotAdminAuthorization === false) {
+                return res.status(403).send("Access denied, you've been banished from Groupospeak")
+            }
+
             bcrypt.compare(req.body.password, user.password)
                 .then( (valid) => {
 
@@ -149,10 +153,44 @@ exports.updatePassword = (req, res) => {
                     .then(hash => {
                         user.password = hash;
                         user.save()
-                        .then(res.status(200).send("Your password's been updated"))
-                        .catch((error) => res.status(500).send( {error : "Problem while saving new password, try again" } ))
+                            .then(res.status(200).send("Your password's been updated"))
+                            .catch((error) => res.status(500).send( {error : "Problem while saving new password, try again" } ))
                     })   
             }
         })
+        .catch((error) => res.status(500).send({error}))
+}
+
+exports.banishUser = (req, res) => {
+    
+    const amIAdmin = () => {
+        
+        User.findOne( {where: {userID: req.auth.tokenUserId} })
+            .then( (admin) => {
+                const boolAdmin = admin.isAdmin;
+                return boolAdmin;
+            })
+            .catch((error) => res.status(500).send({error}))
+    }
+
+    User.findOne( {where: {email: req.params['email']} } )
+        .then( (user) => {
+
+            if (amIAdmin === false) {
+                res.status(403).send("Unauthorized request !..: don't think about it")
+            } else {
+                if (user.gotAdminAuthorization === true) {
+                    user.gotAdminAuthorization = false
+                    console.log("user banished")
+                } else {
+                    user.gotAdminAuthorization = true
+                    console.log("user is authorized")
+                }
+            };
+    
+            user.save()
+                .then(res.status(200).send(user.firstName + (" ") + user.lastName + ("'s authorization modified")))
+                .catch((error) => res.status(500).send( {error : "Problem while saving new user statut, try again" } ))
+        })   
         .catch((error) => res.status(500).send({error}))
 }
