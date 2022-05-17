@@ -8,15 +8,11 @@ const pwdValidation = require("../middleware/pwdValidation");
 
 router.post("/signup", multer, checkEmail, pwdValidation.checkPwd, pwdValidation.confirmPwd, userCtrl.userSignup);
 router.post("/login", checkEmail, userCtrl.userLogin);
-
-// available for the owner account and user admin
-router.delete("/", authentication, userCtrl.deleteUserAccount);
+router.delete("/user/:email", authentication, userCtrl.deleteUserAccount);
+router.put("/avatar/:email", authentication, multer, userCtrl.updateAvatar);
+router.put("/password/:email", authentication, pwdValidation.checkPwd, pwdValidation.confirmPwd, userCtrl.updatePassword);
 /*
-router.put("/avatar", authentication, multer, userCtrl.updateAvatar);
-router.put("/password", authentication, pwdValidation.checkPwd, pwdValidation.confirmPwd, userCtrl.updatePassword);
-
 adminOnly:
 router.put("/ban", authentication, userCtrl.banUser);
-
 */
 module.exports = router;

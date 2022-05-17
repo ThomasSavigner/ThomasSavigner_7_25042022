@@ -8,14 +8,15 @@ const MIME_TYPES = {
 };
 
 const storage = multer.diskStorage({
-    //     
+    //   Picking up only image file  
     fileFilter: function (req, file, cb) {
         if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' 
             && file.mimetype !== 'image/jpeg') {
         cb(null, false);
         } else {
         cb(null, true);
-        }},
+        }
+    },
 
     // file destination path
     destination: (req, file, callback) => {

@@ -12,8 +12,7 @@ const User = db.Users;
 dotenv.config();
 
 
-//              ****  Functions for CRUD operations on user model
-
+//          ****  Functions for CRUD operations on user model
 exports.userSignup = (req, res) => {
 
     //content of request validation
@@ -90,7 +89,7 @@ exports.userLogin = (req, res) => {
 
 exports.deleteUserAccount = (req, res) => {
 
-    User.findOne( {where: {userID: req.auth.tokenUserId}})
+    User.findOne( {where: {email: req.params['email']} } )
         .then( (user) => {
 
             if (user.userID !== req.auth.tokenUserId) {
@@ -109,3 +108,51 @@ exports.deleteUserAccount = (req, res) => {
 		.catch((error) => res.status(500).send({error}))
 }
 
+exports.updateAvatar = (req, res) => {
+   
+    if (!req.file) {
+        return res.status(403).send("Please, import an image from your device")
+    }
+
+    User.findOne(  { where: {email: req.params['email']} } )
+        .then( (user) => { 
+            if (user.userID !== req.auth.tokenUserId) {
+                res.status(403).send("Unauthorized request !")
+            } else {
+
+            const filename = user.avatarUrl.split("/uploads/user-avatars/")[1]
+            
+            fs.unlink(`./uploads/user-avatars/${filename}`, () => {})
+            
+            user.avatarUrl =  `${req.protocol}://${req.get("host")}//uploads/user-avatars/${req.file.filename}`
+
+            user.save()
+                .then(res.status(200).send("Your avatar's been updated"))
+                .catch((error) => res.status(500).send( {error : "Problem while saving new avatar, try again" } ))
+            }
+        })
+        .catch((error) => res.status(500).send({error}))
+}
+
+exports.updatePassword = (req, res) => {
+   
+    if (!req.body.password && !req.body.passwordConfirm) {
+        return res.status(403).send("Please, indicate and confirm your new password.")
+    }
+
+    User.findOne(  { where: {email: req.params['email']} } )
+        .then( (user) => { 
+            if (user.userID !== req.auth.tokenUserId) {
+                res.status(403).send("Unauthorized request !")
+            } else {
+                bcrypt.hash(req.body.password, 10)
+                    .then(hash => {
+                        user.password = hash;
+                        user.save()
+                        .then(res.status(200).send("Your password's been updated"))
+                        .catch((error) => res.status(500).send( {error : "Problem while saving new password, try again" } ))
+                    })   
+            }
+        })
+        .catch((error) => res.status(500).send({error}))
+}
