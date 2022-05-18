@@ -20,6 +20,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.TEXT('medium'),
             allowNull: false,
         },
+        isPublish: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: true,
+            allowNull: false,
+        },
     });
     return Comment;
 };

@@ -51,8 +51,12 @@ module.exports = (sequelize, Sequelize) => {
             set(val) {
                 this.setDataValue("likers", JSON.stringify([val], ","))
             },
-        },    
-        
+        },
+        isPublish: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: true,
+            allowNull: false,
+        }        
     });
     return Post;
 };

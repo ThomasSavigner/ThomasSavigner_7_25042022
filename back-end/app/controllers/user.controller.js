@@ -50,11 +50,10 @@ exports.userSignup = (req, res) => {
                 })
                 .catch(() => res.status(403).send("Problem: user already exist in database"))
         })
+        .catch(error => res.status(500).json({ error }));
 }
 
 exports.userLogin = (req, res) => {
-
-
 
     User.findOne( {where: { email: req.body.email } } )
         .then( (user) => {
@@ -85,10 +84,14 @@ exports.userLogin = (req, res) => {
                         token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })},
                     
                 )})
-                    
                 .catch(error => res.status(500).json({ error }));
-
+            
+            user.loggedInAt = Date.now();
+            user.save()
+                .then(console.log("Login time reccorded"))
+                .catch((error) => res.status(500).send( {error : "Problem while reccording your login time, try again" } ))
          })
+         .catch(error => res.status(500).json({ error }));
 }
 
 exports.deleteUserAccount = (req, res) => {
@@ -110,6 +113,27 @@ exports.deleteUserAccount = (req, res) => {
             }
 		})
 		.catch((error) => res.status(500).send({error}))
+}
+
+exports.userLogout = (req, res) => {
+    
+    User.findOne( {where: {userID: req.auth.tokenUserId}} )
+        .then( (user) => {
+            
+            //timestamp at logout for next login to provide a feeds with unread posts
+            user.loggedOutAt = Date.now();
+            user.save()
+                .then(res.status(200).send("Logout time reccorded"))
+                .catch((error) => res.status(500).send( {error : "Problem while reccording your login time, try again" } ))
+            
+            //remove authentication token stored in browser
+            req.auth = undefined;
+
+        })
+        .catch(error => res.status(500).json({ error }));
+
+    // unstore, expire token ?
+
 }
 
 exports.updateAvatar = (req, res) => {
@@ -184,7 +208,7 @@ exports.banishUser = (req, res) => {
                     console.log("user banished")
                 } else {
                     user.gotAdminAuthorization = true
-                    console.log("user is authorized")
+                    console.log("user authorized")
                 }
             };
     

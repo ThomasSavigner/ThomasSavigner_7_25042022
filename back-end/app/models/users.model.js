@@ -1,6 +1,5 @@
 
 // user table model
-
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("users", {
         userID: {
@@ -17,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
         },
+        avatarUrl: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
         departmentID: {
             type: Sequelize.INTEGER,
             allowNull: false,
@@ -30,10 +33,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        avatarUrl: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
         gotAdminAuthorization: {
             type: Sequelize.BOOLEAN,
             defaultValue: true,
@@ -43,6 +42,12 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN,
             defaultValue: false,
             allowNull: false,
+        },
+        loggedInAt: {
+            type: Sequelize.DATE,
+        },
+        loggedOutAt: {
+            type: Sequelize.DATE,
         },
     });
     return User;
