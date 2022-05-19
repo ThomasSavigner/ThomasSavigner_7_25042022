@@ -5,8 +5,9 @@ const multer = require("../middleware/multer-config_image");
 
 router.post("/", authentication, multer, postCtrl.createPost);
 /*
-router.get("/", authentication, postCtrl.feedProvider);
-router.get("/login/", authentication, postCtrl.getFeedSinceLastLogOut);
+router.get("/", authentication, postCtrl.feedsProviderBtn);
+router.get("/signup/", authentication, postCtrl.getFeedsForOneDay);
+router.get("/login/", authentication, postCtrl.getFeedsSinceLastLogout);
 router.get("/:postID", authentication, postCtrl.focusOnPostandComments);    // includes: comments **** update readings
 router.get("/:email", authentication, postCtrl.getAllMyPosts);      // includes: user
 router.put("/:postID", authentication, multer, postCtrl.updatePost);

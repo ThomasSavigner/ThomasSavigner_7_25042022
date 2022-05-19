@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
         },
         hashtags: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull: false,
             set(val) {
                 this.setDataValue("hashtags", JSON.stringify([val], ","))
@@ -35,7 +35,7 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: 0,
         },
         readers: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull: true,
             set(val) {
                 this.setDataValue("readers", JSON.stringify([val], ","))
@@ -46,7 +46,7 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: 0,
         },
         likers: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
             allowNull: true,
             set(val) {
                 this.setDataValue("likers", JSON.stringify([val], ","))

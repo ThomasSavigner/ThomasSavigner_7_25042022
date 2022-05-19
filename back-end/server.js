@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // ****   connection & synchronization app models with database
-db.sequelize.sync({/* force: true */})
+db.sequelize.sync({/*force: true*/})
   .then( () => { 
     console.log("Synchronization models/database complete");
   }

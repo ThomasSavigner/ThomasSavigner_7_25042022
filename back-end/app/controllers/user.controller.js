@@ -7,7 +7,7 @@ const fs =require("fs");
 
 const db = require("../models");
 const User = db.Users;
-  
+
 //  Set up Global configuration access with isolated parameters
 dotenv.config();
 
@@ -33,14 +33,16 @@ exports.userSignup = (req, res) => {
     		const user = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
+                avatarUrl: avatarUrl,
                 departmentID: req.body.departmentID,
                 email: req.body.email,
                 password: hash,
-                avatarUrl: avatarUrl,
                 gotAdminAuthorization: true,
                 isAdmin: false,
+                loggedInAt: Date.now(),
+                loggedOutAt: null,
             };
-
+            
             User.create(user)
                 .then((valid) => {
                     if (!valid) {
@@ -92,6 +94,29 @@ exports.userLogin = (req, res) => {
                 .catch((error) => res.status(500).send( {error : "Problem while reccording your login time, try again" } ))
          })
          .catch(error => res.status(500).json({ error }));
+}
+
+exports.getMyProfile = (req, res) => {
+
+    User.findOne({ 
+        where: {email: req.params['email']},
+        include: ['department'], 
+        })
+        .then( (user) => {
+            if (user.userID === req.auth.tokenUserId) {
+                const profile = {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    avatarUrl: user.avatarUrl,
+                    department: user.department.name,
+                    email: user.email,
+                }
+                res.status(200).send(profile)
+            } else {
+                res.status(401).json({ error: "You can get only your profile !" })
+            }
+        })
+        .catch( (error) => res.status(500).json({error}) )
 }
 
 exports.deleteUserAccount = (req, res) => {
