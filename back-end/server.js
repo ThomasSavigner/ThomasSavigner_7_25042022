@@ -4,8 +4,8 @@ const app = express();
 const path = require('path');
 const db = require("./app/models");
 const userRoutes = require("./app/routes/user.routes");
-//const postRoutes = require("./app/routes/post.routes");
-//const commentRoutes = require("./app/routes/comment.routes");
+const postRoutes = require("./app/routes/post.routes");
+const commentRoutes = require("./app/routes/comment.routes");
 
 
 // use of CORS
@@ -31,13 +31,13 @@ db.sequelize.sync({/*force: true*/})
 
 //  the user routes will be use for all requests to /api/auth
 app.use('/api/auth', userRoutes);
-/*
+
 //  Every request made to /api/post will call the post routes
 app.use('/api/posts', postRoutes);
 
 //  Every request made to /api/comments will call the comment routes
 app.use('/api/comments', commentRoutes);
-*/
+
 
 // simple route
 app.get("/", (req, res) => {

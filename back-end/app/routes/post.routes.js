@@ -4,10 +4,9 @@ const authentication = require("../middleware/tokenAuth");
 const multer = require("../middleware/multer-config_image");
 
 router.post("/", authentication, multer, postCtrl.createPost);
+
+router.get("/:page", authentication, postCtrl.feedsProvider);
 /*
-router.get("/", authentication, postCtrl.feedsProviderBtn);
-router.get("/signup/", authentication, postCtrl.getFeedsForOneDay);
-router.get("/login/", authentication, postCtrl.getFeedsSinceLastLogout);
 router.get("/:postID", authentication, postCtrl.focusOnPostandComments);    // includes: comments **** update readings
 router.get("/:email", authentication, postCtrl.getAllMyPosts);      // includes: user
 router.put("/:postID", authentication, multer, postCtrl.updatePost);
@@ -20,6 +19,6 @@ router.get("/hot-posts/", postCtrl.getTopPosts);    //  getTheMoreLikedPosts eve
 router.get("/last-posts/", postCtrl.getTheLastPosts);    //  getlastPosts every laptime of 3 mintutes base on UpdateAt column
 
 //  **admin only**
-router.put("/statut/:postID", authentication, postCtrl.unpublishPost);
+router.put("/status/:postID", authentication, postCtrl.unpublishPost);
 */
 module.exports = router;

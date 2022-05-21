@@ -48,7 +48,18 @@ exports.userSignup = (req, res) => {
                     if (!valid) {
                         return res.status(500).send("Technical error, try again")
                     }
-                    res.status(200).send("User account created")
+
+                    let data = {
+                        time: Date(),
+                        userId: user.userID,
+                    }
+                    
+                    res.status(200)
+                        .send({
+                            statut: "User account created",
+                            //  token generation
+                            token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })
+                        })
                 })
                 .catch(() => res.status(403).send("Problem: user already exist in database"))
         })

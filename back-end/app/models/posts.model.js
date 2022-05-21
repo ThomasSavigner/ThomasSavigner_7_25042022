@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull: false,
             set(val) {
-                this.setDataValue("hashtags", JSON.stringify([val], ","))
+                this.setDataValue("hashtags", JSON.stringify(val))
             },
         },
         topic: {
@@ -30,16 +30,21 @@ module.exports = (sequelize, Sequelize) => {
         imageUrl: {
             type: Sequelize.STRING
         },
+        postCommentsModifiedAt: {
+            type: Sequelize.DATE,
+            allowNull: false,
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        },
         readings: {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
         readers: {
             type: Sequelize.TEXT,
-            allowNull: true,
             set(val) {
-                this.setDataValue("readers", JSON.stringify([val], ","))
+                this.setDataValue("readers", JSON.stringify(val))
             },
+            defaultValue: "[]",
         },
         likes: {
             type: Sequelize.INTEGER,
@@ -47,10 +52,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         likers: {
             type: Sequelize.TEXT,
-            allowNull: true,
             set(val) {
-                this.setDataValue("likers", JSON.stringify([val], ","))
+                this.setDataValue("likers", JSON.stringify(val))
             },
+            defaultValue: "[]",
         },
         isPublish: {
             type: Sequelize.BOOLEAN,
