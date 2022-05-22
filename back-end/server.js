@@ -6,7 +6,9 @@ const db = require("./app/models");
 const userRoutes = require("./app/routes/user.routes");
 const postRoutes = require("./app/routes/post.routes");
 const commentRoutes = require("./app/routes/comment.routes");
-
+//const fakeUser = require('./fake-seeds.users');
+//const fakePost = require("./fake-seeds.posts");
+//const fakeComment = require("./fake-seeds.comments");
 
 // use of CORS
 var corsOptions = {
@@ -25,8 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 db.sequelize.sync({/*force: true*/})
   .then( () => { 
     console.log("Synchronization models/database complete");
-  }
-);
+ });
 
 
 //  the user routes will be use for all requests to /api/auth
@@ -48,6 +49,11 @@ app.get("/", (req, res) => {
 //  enable the files download from/to the in server's folders
 app.use("/images", express.static( path.join(__dirname, "/uploads/user-avatars") ));
 app.use('uploads/post-images', express.static( path.join(__dirname, '/uploads/post-images') ));
+
+//  Add data
+//fakeUser.createFakeUsers()
+//fakePost.createFakePosts()
+//fakeComment.createFakeComments()
 
 
 // set port, listen for requests

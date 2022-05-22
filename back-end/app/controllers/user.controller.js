@@ -30,7 +30,8 @@ exports.userSignup = (req, res) => {
 	// crypt password
 	bcrypt.hash(req.body.password, 10)
         .then( hash => {
-    		const user = {
+    		
+            const user = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 avatarUrl: avatarUrl,
