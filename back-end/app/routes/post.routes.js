@@ -4,13 +4,11 @@ const authentication = require("../middleware/tokenAuth");
 const multer = require("../middleware/multer-config_image");
 
 router.post("/", authentication, multer, postCtrl.createPost);
-
 router.get("/:page", authentication, postCtrl.feedsProvider);
-//router.get("/login/:page", authentication, postCtrl.feedsAtLogin);
-
+router.get("/login/:page", authentication, postCtrl.feedsAtLogin);
+router.get("/post/:postID", authentication, postCtrl.focusOnPostandComments);
+router.get("/:email/:page", authentication, postCtrl.getAllMyPosts);
 /*
-router.get("/:postID", authentication, postCtrl.focusOnPostandComments);    // includes: comments **** update readings
-router.get("/:email", authentication, postCtrl.getAllMyPosts);      // includes: user
 router.put("/:postID", authentication, multer, postCtrl.updatePost);
 router.put("/like/:postID", authentication, postCtrl.likePost);
 router.delete("/:postID", authentication, postCtrl.deletePost);     // includes: comments

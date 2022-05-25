@@ -24,7 +24,7 @@ exports.createFakePosts= () => {
         function randomIntFromInterval(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
-        const rndInt = randomIntFromInterval(448, 491);
+        const rndInt = randomIntFromInterval(442, 491);
         //************* */
         const postHashtags = Array.from([`#`+faker.random.word(), `#`+faker.random.word(), `#`+faker.random.word()]);
         //************* */
@@ -32,11 +32,12 @@ exports.createFakePosts= () => {
         //************* */
         const postArticle = faker.lorem.paragraphs(5);
         //************* */
-
+        const imagePath = 'http://localhost:4039/uploads/post-images/' + newFileName;
+        //************* */
         const readingsNumber = randomIntFromInterval(1, 49);
         
         let usersArray = [];
-        for (y= 442; y < 492; y++) {
+        for (y= 441; y < 492; y++) {
             usersArray.push(y);
         }
         let readersArray = usersArray.sort(() => Math.random() - Math.random()).slice(0, readingsNumber)
@@ -50,7 +51,7 @@ exports.createFakePosts= () => {
             hashtags: postHashtags,
             topic: postTopic,
             article: postArticle,
-            imageUrl: target,
+            imageUrl: imagePath,
             readings: readingsNumber,
             readers: readersArray,
             likes: likesNumber,

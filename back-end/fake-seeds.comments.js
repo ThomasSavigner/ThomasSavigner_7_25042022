@@ -12,7 +12,7 @@ exports.createFakeComments = () => {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
         const rndInt1 = randomIntFromInterval(442, 491);
-        const rndInt2 = randomIntFromInterval(1851, 1875);
+        const rndInt2 = randomIntFromInterval(1882, 1906);
         //************* */
 
         const myComment ={
