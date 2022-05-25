@@ -62,7 +62,7 @@ exports.feedsProvider = (req, res) => {
                 include: [{
                     
                     association: 'userP',
-                    attributes: ['firstName', 'lastName'],
+                    attributes: ['firstName', 'lastName', 'avatarUrl'],
                     include: [{
                         association: 'department',
                         attributes: ['name'],
@@ -121,7 +121,7 @@ exports.feedsAtLogin = (req, res) => {
                                     ],
                         include: [{
                             association: 'userP',
-                            attributes: ['firstName', 'lastName'],
+                            attributes: ['firstName', 'lastName', 'avatarUrl'],
                             include: [{
                                 association: 'department',
                                 attributes: ['name'],
@@ -153,17 +153,20 @@ exports.focusOnPostandComments = (req, res) => {
             ],
             include: [{
                 association: 'userP',
-                attributes: ['firstName', 'lastName'],
+                attributes: ['firstName', 'lastName', 'avatarUrl'],
                 include: [{
                     association: 'department',
                     attributes: ['name'],
                 }],
             }, {
                 association: 'pstComments',
+                where: {
+                    isPublish: true
+                },
                 attributes: ['userID', 'postID', 'content'],
                 include: [{
                     association: 'userC',
-                    attributes: ['firstName', 'lastName'],
+                    attributes: ['firstName', 'lastName', 'avatarUrl'],
                 }],
             }],
         })
@@ -200,10 +203,13 @@ exports.getAllMyPosts = (req, res) => {
                             ],
                 include: [{
                     association: 'pstComments',
+                    where: {
+                        isPublish: true
+                    },
                     attributes: ['content'],
                     include: [{
                         association: 'userC',
-                        attributes: ['firstName', 'lastName'],
+                        attributes: ['firstName', 'lastName', 'avatarUrl'],
                     }]
                 }],
                 limit: limit,
@@ -219,4 +225,3 @@ exports.getAllMyPosts = (req, res) => {
         });
 
 }
-
