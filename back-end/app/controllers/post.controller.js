@@ -82,9 +82,7 @@ exports.feedsProvider = (req, res) => {
 }
 
 exports.feedsAtLogin = (req, res) => {
-    
-    //let lastLogoutDate = " ";
-
+   
     User.findOne({
         where: {
             userID: req.auth.tokenUserId,
@@ -149,7 +147,8 @@ exports.focusOnPostandComments = (req, res) => {
                 postId: req.params['postID'],
             },
             attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
-                            'postCommentsModifiedAt', 'readings', 'likes',
+                            'postCommentsModifiedAt', 'readings', 'readers',
+                            'likes', 'likers',
             ],
             include: [{
                 association: 'userP',
@@ -171,7 +170,36 @@ exports.focusOnPostandComments = (req, res) => {
             }],
         })
         .then((data) => {
-            res.status(200).json(data)
+            const everRead = data.readers.includes(req.auth.tokenUserId)
+            if (!everRead) {    //  increment post.readings, save reader
+                Post.findOne({
+                    where: {postID:req.params['postID']}
+                    })
+                    .then((post)=>{
+                        let readingsNbr = post.readings+1
+                        let readersArray = JSON.parse(post.readers)
+                        readersArray.push(req.auth.tokenUserId);
+                        post.set({
+                            readings:readingsNbr,
+                            readers: readersArray,
+                        })
+                        post.save()
+                            .then(
+                                console.log("reading inc, reader added ; Post updated")  
+                            )   
+                            .catch((error) => res.status(500).send( {error : "Problem while saving new reader, try again" } ))
+                    })
+            }
+
+            //  Did the readers ever like post ?
+            let heartHasColor = "";
+            if (data.likers.includes(req.auth.tokenUserId)) {
+                heartHasColor = true;    
+            } else {        //  Boolean variable for customizing user front interface
+                heartHasColor = false;
+            }
+
+            res.status(200).json({'Focus on Post & its comments :-->': data,  'heartHasColor --->': heartHasColor})
         })
         .catch((err) => { res.status(404).send("I don't find it ! Try again...later...")})
 
@@ -225,3 +253,90 @@ exports.getAllMyPosts = (req, res) => {
         });
 
 }
+
+exports.updatePost = (req, res) => {
+
+    Post.findOne({
+        where: {
+            postID: req.params['postID'],
+            isPublish: true,
+        },
+        })
+        .then( (post) => {
+
+            if (post.userID !== req.auth.tokenUserId) {
+                res.status(403).send("Unauthorized request: you're not the post's author")                
+            }
+
+            if (req.file) {
+
+                fileName = post.imageUrl.split('/uploads/post-images/')[1];
+                fs.unlinkSync(`uploads/post-images/${fileName}`);
+            
+            }
+
+            const postUpdated = req.file ? {
+                ...req.body,
+                postCommentsModifiedAt: Date.now(),
+                imageUrl: `${req.protocol}://${req.get('host')}/uploads/post-images/${req.file.filename}`
+            } : {
+                ...req.body,
+                postCommentsModifiedAt: Date.now(),
+                imageUrl: post.imageUrl,
+            }
+
+            Post.update(postUpdated, {
+                where: {
+                    postID: req.params['postID'],
+                    isPublish: true,
+                },
+                })
+                .then( () => {
+                    res.status(200).send("Post Updated")
+                })   
+                .catch((err) => { res.status(500).send("Problem at updating DB: " + err)})
+        
+        })
+        .catch((err) => { res.status(500).send("Problem : " + err)})
+
+}
+
+exports.likePost = (req, res) => {
+ 
+    Post.findOne({
+        where: {
+            postID: req.params['postID'],
+            isPublish: true,
+        },
+        })
+        .then( (post) => {
+
+            if (post.userID === req.auth.tokenUserId) {
+                res.status(403).send("Unauthorized request: You can't like your post")                
+            }
+
+            //  Did user ever like post ?
+            let likersArray = JSON.parse(post.likers)
+            const everLiked = likersArray.includes(req.auth.tokenUserId)
+            if (!everLiked) {    //  increment post.likers, save liker
+                let likesNbr = post.likes+1
+                likersArray.push(req.auth.tokenUserId);
+                post.set({
+                    likes: likesNbr,
+                    likers: likersArray,
+                })
+                post.save()
+                    .then(
+                        res.status(200).send("Like saved")  
+                    )   
+                    .catch((error) => res.status(500).send( {error : "Problem while saving like, try again" } ))
+            } else {
+                res.status(403).send("You ever liked post")
+            }
+        })
+        .catch((err) => { res.status(500).send("Problem : " + err)})
+
+}
+
+
+

@@ -42,9 +42,9 @@ exports.createFakePosts= () => {
         }
         let readersArray = usersArray.sort(() => Math.random() - Math.random()).slice(0, readingsNumber)
         //******** */
-        const likesNumber = randomIntFromInterval(1, 49);
+        const likesNumber = randomIntFromInterval(1, readingsNumber);
         
-        let likersArray = usersArray.sort(() => Math.random() - Math.random()).slice(0, likesNumber)
+        let likersArray = readersArray.sort(() => Math.random() - Math.random()).slice(0, likesNumber)
         
         const myPost = {
             userID: rndInt,

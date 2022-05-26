@@ -8,10 +8,9 @@ router.get("/:page", authentication, postCtrl.feedsProvider);
 router.get("/login/:page", authentication, postCtrl.feedsAtLogin);
 router.get("/post/:postID", authentication, postCtrl.focusOnPostandComments);
 router.get("/:email/:page", authentication, postCtrl.getAllMyPosts);
-//router.put("/:postID", authentication, multer, postCtrl.updatePost);
-/*
+router.put("/:postID", authentication, multer, postCtrl.updatePost);
 router.put("/like/:postID", authentication, postCtrl.likePost);
-router.delete("/:postID", authentication, postCtrl.deletePost);     // includes: comments
+/*router.delete("/:postID", authentication, postCtrl.deletePost);     // includes: comments
 router.delete("/:email", authentication, postCtrl.deleteAllMyPosts);    //includes: user
 
 //  **notifications**
