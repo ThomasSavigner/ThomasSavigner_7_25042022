@@ -12,19 +12,17 @@ const Op = Sequelize.Op;
 //        controllers for CRUD operations on posts table and associates
 
 exports.createPost = (req, res) => {
-    
-    // Validation !
 
     let imagePath = ""
     if (req.file) {
         imagePath = `${req.protocol}://${req.get("host")}/uploads/post-images/${req.file.filename}`
+    } else {
+        imagePath = ""
     }
-
-    const hashtagsArray = req.body.hashtags.match(/#\S+/g);
 
     const myPost = {
         userID: req.auth.tokenUserId,
-        hashtags: hashtagsArray,
+        hashtags: req.body.hashtags,
         topic: req.body.topic,
         article: req.body.article,
         imageUrl: imagePath,
@@ -72,7 +70,7 @@ exports.feedsProvider = (req, res) => {
                 offset: offset,
                 order: [['postCommentsModifiedAt', 'DESC']]
             })
-                .then((posts) => {          //  ******* add next page: bool
+                .then((posts) => {
                     res.status(200).json({'result': posts, 'count': data.count, 'pages': pages});
                 });
         })
@@ -177,7 +175,7 @@ exports.focusOnPostandComments = (req, res) => {
                     })
                     .then((post)=>{
                         let readingsNbr = post.readings+1
-                        let readersArray = JSON.parse(post.readers)
+                        let readersArray = post.readers
                         readersArray.push(req.auth.tokenUserId);
                         post.set({
                             readings:readingsNbr,
@@ -213,7 +211,7 @@ exports.getAllMyPosts = (req, res) => {
     Post.findAndCountAll({
             where: {
                 isPublish: true,
-                userID: req.auth.tokenUserId,
+                userID: req.params['userID'],
             }
          })
         .then((data) => {
@@ -225,6 +223,7 @@ exports.getAllMyPosts = (req, res) => {
             Post.findAll({
                 where: {
                     isPublish: true,
+                    userID: req.params['userID'],
                 },
                 attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
                                 'postCommentsModifiedAt', 'readings', 'likes',
@@ -245,12 +244,10 @@ exports.getAllMyPosts = (req, res) => {
                 order: [['postCommentsModifiedAt', 'DESC']]
             })
                 .then((posts) => {          //  ******* add next page: bool
-                    res.status(200).json({'result': posts, 'count': data.count, 'pages': pages});
+                    res.status(200).json({'results': posts, 'count': data.count, 'pages': pages});
                 });
         })
-        .catch(function (error) {
-            res.status(500).send('Internal Server Error');
-        });
+        .catch((error) => {res.status(500).send('Internal Server Error ::> '+error)})
 
 }
 
@@ -297,7 +294,7 @@ exports.updatePost = (req, res) => {
                 .catch((err) => { res.status(500).send("Problem at updating DB: " + err)})
         
         })
-        .catch((err) => { res.status(500).send("Problem : " + err)})
+        .catch((err) => { res.status(500).send("Internal Server error : " + err)})
 
 }
 
@@ -316,7 +313,7 @@ exports.likePost = (req, res) => {
             }
 
             //  Did user ever like post ?
-            let likersArray = JSON.parse(post.likers)
+            let likersArray = post.likers
             const everLiked = likersArray.includes(req.auth.tokenUserId)
             if (!everLiked) {    //  increment post.likers, save liker
                 let likesNbr = post.likes+1
@@ -338,5 +335,197 @@ exports.likePost = (req, res) => {
 
 }
 
+exports.deletePost = (req, res) => {
+
+    Post.findOne({
+            where: {
+                postID: req.params['postID'],
+                isPublish: true,
+            }
+        })
+        .then((post) => {
+
+            if (post.userID !== req.auth.tokenUserId) {
+                res.status(403).send("Delete process cancelled: you're not the post owner !")
+            }
+
+            const filename = post.imageUrl.split('/uploads/post-images/')[1];
+            fs.unlink(`./uploads/post-images/${filename}`, ()=>{})
+
+            Post.destroy({
+                    where: {
+                        postID: req.params['postID'],
+                        isPublish: true,
+                    }
+                })
+                .then( () => {
+                    res.status(200).send("Post deleted")
+                })
+                .catch((err) => {res.send("Deletion failed - error ::>" + err)})
+            
+        })
+        .catch((err) => {res.status(500).send("Problem :::> " + err)})
+
+}
+
+exports.deleteAllMyPostsAndCo = (req, res) => {
+    
+    const userIDValue = parseInt(req.params['userID'])
+
+    if (userIDValue !== req.auth.tokenUserId) {
+        res.status(403).send("Deletion process cancelled: you're not the posts owner !")
+    }
+
+    Post.findAndCountAll({
+            where: {
+                userID: req.params['userID'],
+                isPublish: true,
+            }
+        })
+        .then((data) => {
+            
+            for (i=0; i < data.count; i++) {
+                const filename = data.rows[i]['imageUrl'].split('/uploads/post-images/')[1];
+                fs.unlink(`./uploads/post-images/${filename}`, () => {
+                    console.log("files deleted")
+                })
+            }
+                   
+            Post.destroy({
+                    where: {
+                        userID: req.params['userID'],
+                        isPublish: true,
+                    }
+                })
+                .then( () => {
+                    res.status(200).send("Posts deleted")
+                    console.log("Posts deleted")
+                })
+                .catch((err) => {res.status(500).send("Deletions failed- error ::> " + err)})
+            })
+        .catch((err)=>{res.status(500).send(err)})
+        
+}
+
+exports.getTopPosts = (req, res) => {
+    
+    const ranks = parseInt(req.params['limit']);
+
+    Post.findAll({
+            where: {isPublish: true},
+            order: [['likes', 'DESC']],
+            include: [{
+                association: 'userP',
+                attributes: ['firstName', 'lastName', 'avatarUrl'],
+                include: [{
+                    association: 'department',
+                    attributes: ['name'],
+                }]
+            }],
+            limit: ranks,
+        })
+        .then((postsliked)=>{
+            let results = [];
+            for (i=0; i< ranks; i++) {
+                this["postNumber"+i] = {
+                    postID: postsliked[i].postID,
+                    userID: postsliked[i].userID,
+                    firstName: postsliked[i].userP.firstName,
+                    lastName: postsliked[i].userP.lastName,
+                    department: postsliked[i].userP.department.name,
+                    avatarUrl: postsliked[i].userP.avatarUrl,
+                    hashtags: postsliked[i].hashtags,
+                    topic: postsliked[i].topic,
+                    article: postsliked[i].article,
+                    imageUrl: postsliked[i].imageUrl,
+                    postCommentsModifiedAt: postsliked[i].postCommentsModifiedAt,
+                    readings: postsliked[i].readings,
+                    likes: postsliked[i].likes,
+                }
+                results.push(JSON.stringify(this["postNumber"+i]))
+            }
+        
+            res.status(200).send("Posts Top"+ranks+" :::> "+results)
+        })
+        .catch((err) => {res.status(500).send("Something wrong to get posts top ten" + err)})    
 
 
+}
+
+exports.getTheNLastPosts = (req, res) => {
+
+    const ranks = parseInt(req.params['limit']);
+
+    Post.findAll({
+        where: {isPublish: true},
+        order: [['postCommentsModifiedAt', 'DESC']],
+        include: [{
+            association: 'userP',
+            attributes: ['firstName', 'lastName', 'avatarUrl'],
+            include: [{
+                association: 'department',
+                attributes: ['name'],
+            }]
+        }],
+        limit: ranks,
+        })
+        .then((lastPosts)=>{
+            let results = [];
+            for (i=0; i< ranks; i++) {
+                this["postNumber"+i] = {
+                    postID: lastPosts[i].postID,
+                    userID: lastPosts[i].userID,
+                    firstName: lastPosts[i].userP.firstName,
+                    lastName: lastPosts[i].userP.lastName,
+                    department: lastPosts[i].userP.department.name,
+                    avatarUrl: lastPosts[i].userP.avatarUrl,
+                    hashtags: lastPosts[i].hashtags,
+                    topic: lastPosts[i].topic,
+                    article: lastPosts[i].article,
+                    imageUrl: lastPosts[i].imageUrl,
+                    postCommentsModifiedAt: lastPosts[i].postCommentsModifiedAt,
+                    readings: lastPosts[i].readings,
+                    likes: lastPosts[i].likes,
+                }
+                results.push(JSON.stringify(this["postNumber"+i]))
+            }
+            
+            res.status(200).send("Last "+ranks+" Posts :::>" + results)})
+        .catch((err)=>{{res.status(500).send("Something wrong to get last posts headers" + err)}})
+
+}
+
+exports.unpublishPost = (req, res) => {
+    
+    const amIAdmin = () => {
+        
+        User.findOne( {where: {userID: req.auth.tokenUserId} })
+            .then( (admin) => {
+                const boolAdmin = admin.isAdmin;
+                return boolAdmin;
+            })
+            .catch((error) => res.status(500).send({error}))
+    }
+
+    Post.findOne( {where: {postID: req.params['postID']}} )
+        .then( (post) => {
+
+            if (amIAdmin === false) {
+                res.status(403).send("Unauthorized request !..: don't think about it")
+            } else {
+                if (post.isPublish === true) {
+                    post.isPublish = false
+                    console.log("Post unpublished")
+                } else {
+                    post.isPublish = true
+                    console.log("Post published")
+                }
+            };
+    
+            post.save()
+                .then(res.status(200).send("Post publish status modified"))
+                .catch((error) => {res.status(500).send( "Problem while saving new publish status :::> " + error )})
+        })   
+        .catch((error) => res.status(500).send({error}))
+
+}

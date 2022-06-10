@@ -10,7 +10,7 @@ const https = require('https');
 
 exports.createFakeUsers = () => {
 
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < 150; i++) {
 
         // URL of the image
         const url = faker.image.avatar();
@@ -43,7 +43,7 @@ exports.createFakeUsers = () => {
         const firstLetter = oneFirstName[0];
         const mail = firstLetter.toLowerCase() + oneLastName.toLowerCase() + '@groupomania.fr';
         //*************** */
-        const pwd = `LmEaHy4h67[gs]+`; //faker.internet.password(12, false, /.*/);
+        const pwd = `LmEaHy4h67[gs]+`;
         
         const hash = bcrypt.hashSync(pwd, 10);
 

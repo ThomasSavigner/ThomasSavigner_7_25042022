@@ -6,7 +6,7 @@ const fs = require('fs');
 
 exports.createFakePosts= () => {
     
-    for (i = 0; i < 25; i++) {
+    for (i = 0; i < 85; i++) {
 
         /**************** */
         const sourceDirImages = 'D:/data/OpenClassrooms/P7/photos/backend/postphotos/'
@@ -24,9 +24,9 @@ exports.createFakePosts= () => {
         function randomIntFromInterval(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
-        const rndInt = randomIntFromInterval(442, 491);
+        const rndInt = randomIntFromInterval(151, 300);
         //************* */
-        const postHashtags = Array.from([`#`+faker.random.word(), `#`+faker.random.word(), `#`+faker.random.word()]);
+        const stringHashtags = `#${faker.random.word()} #${faker.random.word()} #${faker.random.word()}`;
         //************* */
         const postTopic =  faker.lorem.sentence();
         //************* */
@@ -34,10 +34,10 @@ exports.createFakePosts= () => {
         //************* */
         const imagePath = 'http://localhost:4039/uploads/post-images/' + newFileName;
         //************* */
-        const readingsNumber = randomIntFromInterval(1, 49);
+        const readingsNumber = randomIntFromInterval(1, 60);
         
         let usersArray = [];
-        for (y= 441; y < 492; y++) {
+        for (y= 151; y < 300; y++) {
             usersArray.push(y);
         }
         let readersArray = usersArray.sort(() => Math.random() - Math.random()).slice(0, readingsNumber)
@@ -48,7 +48,7 @@ exports.createFakePosts= () => {
         
         const myPost = {
             userID: rndInt,
-            hashtags: postHashtags,
+            hashtags: stringHashtags,
             topic: postTopic,
             article: postArticle,
             imageUrl: imagePath,
@@ -63,9 +63,11 @@ exports.createFakePosts= () => {
                 if (!valid) {
                     return console.log("Technical error, try again");
                 }
-                //response.status(200).send
+                
                 console.log("Post uploaded to DB");
+                
             })
-            .catch(() => console.log("Problem while creating instance in DB table"));
-    }
+            .catch((err) => console.log("Problem while creating instance in DB table" + err));
+    
+        }
 }

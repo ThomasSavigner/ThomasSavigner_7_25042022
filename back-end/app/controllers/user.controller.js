@@ -13,6 +13,7 @@ dotenv.config();
 
 
 //          ****  Functions for CRUD operations on user model
+
 exports.userSignup = (req, res) => {
 
     //content of request validation
@@ -251,7 +252,7 @@ exports.banishUser = (req, res) => {
     
             user.save()
                 .then(res.status(200).send(user.firstName + (" ") + user.lastName + ("'s authorization modified")))
-                .catch((error) => res.status(500).send( {error : "Problem while saving new user statut, try again" } ))
+                .catch((error) => {res.status(500).send("Problem while saving new user statut - error :::> " + error)})
         })   
         .catch((error) => res.status(500).send({error}))
 }

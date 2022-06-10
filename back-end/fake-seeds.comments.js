@@ -13,12 +13,12 @@ exports.createFakeComments = () => {
         function randomIntFromInterval(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
-        //const rndInt1 = randomIntFromInterval(442, 491);
-        const rndInt2 = randomIntFromInterval(1907, 1931);
+        
+        const rndInt2 = randomIntFromInterval(1276, 1360);
         //************* */
         Post.findOne( {where: {postID:rndInt2}} )
             .then((post)=>{
-                let readersArray = JSON.parse(post.readers)
+                let readersArray = post.readers;
                 const userID =  readersArray[Math.floor(Math.random() * readersArray.length)];
                 const myComment ={
                     userID: userID,
@@ -35,5 +35,6 @@ exports.createFakeComments = () => {
                     })
                     .catch( (err) =>{ console.log("Big Problem while saving to DB:" + err)})
             })
+            .catch((err) => { console.log(err)})
     }
 }

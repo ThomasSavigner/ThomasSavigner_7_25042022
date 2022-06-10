@@ -15,9 +15,8 @@ module.exports = (sequelize, Sequelize) => {
         hashtags: {
             type: Sequelize.TEXT,
             allowNull: false,
-            set(val) {
-                this.setDataValue("hashtags", JSON.stringify(val))
-            },
+            get: function () { return JSON.parse(this.getDataValue('hashtags')).join(' ')},
+            set: function (hashtags) {this.setDataValue('hashtags', JSON.stringify(hashtags.split(' ')))},
         },
         topic: {
             type: Sequelize.STRING,
@@ -41,9 +40,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         readers: {
             type: Sequelize.TEXT,
-            set(val) {
-                this.setDataValue("readers", JSON.stringify(val))
-            },
+            get: function () {return JSON.parse(this.getDataValue('readers'))},
+            set: function (readers) {this.setDataValue('readers', JSON.stringify(readers))},
             defaultValue: "[]",
         },
         likes: {
@@ -52,9 +50,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         likers: {
             type: Sequelize.TEXT,
-            set(val) {
-                this.setDataValue("likers", JSON.stringify(val))
-            },
+            get: function () {return JSON.parse(this.getDataValue('likers'))},
+            set: function (likers) {this.setDataValue('likers', JSON.stringify(likers))},
             defaultValue: "[]",
         },
         isPublish: {

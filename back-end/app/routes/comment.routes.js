@@ -3,13 +3,12 @@ const commentCtrl = require("../controllers/comment.controller");
 const authentication = require("../middleware/tokenAuth");
 
 router.post("/:postID", authentication, commentCtrl.createComment);
-/*
-router.get("/:email", authentication, commentCtrl.getAllMyComments);
+router.get("/:userID/:page", authentication, commentCtrl.getAllMyComments);
 router.put("/:commentID", authentication, commentCtrl.updateComment);
-router.delete("/:commentID", authentication, commentCtrl.deleteComment);
-router.delete("/:email", authentication, commentCtrl.deleteAllMyComments);
-
 //  **admin only**
-router.put("/statut/:commentID", authentication, commentCtrl.unpublishComment);
-*/
+router.put("/status/:commentID", authentication, commentCtrl.unpublishComment);
+//  ******
+router.delete("/:commentID", authentication, commentCtrl.deleteComment);
+router.delete("/user/:userID", authentication, commentCtrl.deleteAllMyComments);
+
 module.exports = router;
