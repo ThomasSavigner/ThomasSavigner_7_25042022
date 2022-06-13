@@ -2,7 +2,7 @@ import { useOutlet } from "react-router-dom";
 //import { useAuth } from "../hooks/useAuth";
 
 
- const ProtectedLayout = () => {
+ const PublicLayout = () => {
 //    const { user } = useAuth();
     const outlet = useOutlet();
 
@@ -12,10 +12,10 @@ import { useOutlet } from "react-router-dom";
 
     return (
         <div>
-            <h1>cette route est protégée </h1>
+            <h1>cette route est publique </h1>
         {outlet}
         </div>
     );
 };
 
-export default ProtectedLayout
+export default PublicLayout

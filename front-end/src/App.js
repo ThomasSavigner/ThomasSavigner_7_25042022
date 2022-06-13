@@ -8,18 +8,19 @@ import FocusOnPost from './pages/FocusOnPost';
 import Profile from './pages/Profile';
 import MyPublications from './pages/MyPublications';
 import NotFound from './pages/NotFound';
+import PublicLayOut from './components/PublicLayOut/index'
 import ProtectedLayout from './components/ProtectedLayout/index';
 
 import './styles/App.css'
 
 function App() {
 
-
-
     return (
     <BrowserRouter>
         <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<PublicLayOut />} > 
+                <Route index element={<Login />} />
+            </Route>
             <Route path="/app" element={<ProtectedLayout />} >
                 <Route path="feeds" element={<Feeds />} />
                 <Route path="post" element={<CreatePost />} />

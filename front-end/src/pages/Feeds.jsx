@@ -9,7 +9,7 @@ function Feeds() {
 
     <div className="App">
       <nav>
-        <Link to="/login"> Logout </Link>
+        <Link to="/"> Logout </Link>
         <Link to="/app/post"> Type post </Link>
         <Link to="/app/:postID"> Read post </Link>
         <Link to="/app/mypublications"> My publications </Link>
