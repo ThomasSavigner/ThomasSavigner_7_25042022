@@ -5,7 +5,6 @@ const multer = require("../middleware/multer-config_avatar");
 const checkEmail = require("../middleware/domainMailCheck");
 const pwdValidation = require("../middleware/pwdValidation");
 
-
 router.post("/signup", multer, checkEmail, pwdValidation.checkPwd, pwdValidation.confirmPwd, userCtrl.userSignup);
 router.post("/login", checkEmail, userCtrl.userLogin);
 router.get("/:email", authentication, userCtrl.getMyProfile)

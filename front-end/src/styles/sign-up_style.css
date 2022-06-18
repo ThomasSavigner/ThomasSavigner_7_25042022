@@ -8,20 +8,20 @@ main colors->
       4th : #f2f1e7
 */
 .color-1 {
-	background-color: #5c4d4d;
-  }
-  
-  .color-2 {
-	background-color: #915b4a;
-  }
-  
-  .color-3 {
-	background-color: #a96851;
-  }
-  
-  .color-4 {
-	background-color: #f2f1e7;
-  }
+  background-color: #5c4d4d;
+}
+
+.color-2 {
+  background-color: #915b4a;
+}
+
+.color-3 {
+  background-color: #a96851;
+}
+
+.color-4 {
+  background-color: #f2f1e7;
+}
   
 
   /*--- fonts ---*/
@@ -66,7 +66,7 @@ main colors->
 
   /* left & right column */
 .img-fit {
-	object-fit: cover;
+	object-fit: contain;
 }
   
 .container-img-position {
@@ -91,7 +91,19 @@ h1 {
   font-weight: 600;
 }
 
+
+
 /* login signup box */
+
+/* headers tabs*/
+.nav.nav-tabs .nav-link.active {
+  background-color: #a96851;
+  width: 100%;
+  color: white;
+  text-align: center;
+  font-weight: 400;
+}
+
 .tabs-container-size {
   width: 90%;
   max-width: 25em;

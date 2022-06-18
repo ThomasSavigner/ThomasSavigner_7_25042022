@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const fs =require("fs");
 
+
 const db = require("../models");
 const User = db.Users;
 
@@ -62,6 +63,16 @@ exports.userSignup = (req, res) => {
                             //  token generation
                             token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })
                         })
+
+                    saveLoginTimestamp = () => { 
+                        user.loggedInAt = Date.now();
+                        user.save()
+                            .then(console.log("Login time reccorded"))
+                            .catch((error) => res.status(500).send( "Problem while reccording your login time, try again... ; " + error ))
+                    }
+
+                    saveLoginTimestamp();
+
                 })
                 .catch(() => res.status(403).send("Problem: user already exist in database"))
         })
@@ -70,43 +81,52 @@ exports.userSignup = (req, res) => {
 
 exports.userLogin = (req, res) => {
 
-    User.findOne( {where: { email: req.body.email } } )
-        .then( (user) => {
-            
-            if (!user) {
-                return res.status(403).send("Access denied, please sign-up first")
-            };
-            
-            if (user.gotAdminAuthorization === false) {
-                return res.status(403).send("Access denied, you've been banished from Groupospeak")
-            }
+        User.findOne( {where: { email: req.body.email } } )
+            .then( (user) => {
+                
+                if (!user) {
+                    return res.status(403).send("Access denied, please sign-up first")
+                };
+                
+                if (user.gotAdminAuthorization === false) {
+                    return res.status(403).send("Access denied, you've been banished from Groupospeak")
+                }
 
-            bcrypt.compare(req.body.password, user.password)
-                .then( (valid) => {
+                bcrypt.compare(req.body.password, user.password)
+                    .then( (valid) => {
 
-                    if (!valid) {
-                        return res.status(401).json({ error: 'Invalid password !' });
-                    }
+                        if (!valid) {
+                            document.getElementById
 
-                    let data = {
-                        time: Date(),
-                        userId: user.userID,
-                    }
+                            return res.status(401).json({ error: 'Invalid password !' });
+                        }
 
-                    res.status(200).send({
-                        statut: "Logged in user",
-                        //  token generation
-                        token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })},
-                    
-                )})
-                .catch(error => res.status(500).json({ error }));
-            
-            user.loggedInAt = Date.now();
-            user.save()
-                .then(console.log("Login time reccorded"))
-                .catch((error) => res.status(500).send( {error : "Problem while reccording your login time, try again" } ))
-         })
-         .catch(error => res.status(500).json({ error }));
+                        let data = {
+                            time: Date(),
+                            userId: user.userID,
+                        }
+
+                        res.status(200).send( {
+                            statut: "Logged in user",
+                            //  token generation
+                            token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })
+                        } );
+
+                        const saveLoginTimestamp = () => { 
+                            user.loggedInAt = Date.now();
+                            user.save()
+                                .then(console.log("Login time reccorded"))
+                                .catch((error) => res.status(500).send( "Problem while reccording your login time, try again... ; " + error ))
+                        };
+
+                        saveLoginTimestamp();
+                    })
+                    .catch(error => res.status(500).json({ error }));
+                
+                
+            })
+            .catch(error => res.status(500).json({ error }));
+        
 }
 
 exports.getMyProfile = (req, res) => {

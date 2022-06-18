@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { Routes, Route } from "react-router-dom";
 import Login from './pages/Login';
 import Feeds from './pages/Feeds';
 import CreatePost from './pages/CreatePost';
@@ -16,21 +15,21 @@ import './styles/App.css'
 function App() {
 
     return (
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<PublicLayOut />} > 
-                <Route index element={<Login />} />
-            </Route>
-            <Route path="/app" element={<ProtectedLayout />} >
-                <Route path="feeds" element={<Feeds />} />
-                <Route path="post" element={<CreatePost />} />
-                <Route path=":postID" element={<FocusOnPost />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="mypublications" element={<MyPublications />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-        </Routes>
-    </BrowserRouter>
+    
+            <Routes>
+                <Route path="/" element={<PublicLayOut />} > 
+                    <Route index element={<Login />} />
+                </Route>
+                <Route path="/app" element={<ProtectedLayout />} >
+                    <Route path="feeds" element={<Feeds />} />
+                    <Route path="post" element={<CreatePost />} />
+                    <Route path=":postID" element={<FocusOnPost />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="mypublications" element={<MyPublications />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+   
     )
 }
 

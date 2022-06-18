@@ -1,14 +1,14 @@
-import { useOutlet } from "react-router-dom";
-//import { useAuth } from "../hooks/useAuth";
+import { Navigate, useOutlet } from "react-router-dom";
+//import { useAuth } from "../../utils/useAuth";
 
 
  const ProtectedLayout = () => {
-//    const { user } = useAuth();
+  //  const { token } = useAuth();
     const outlet = useOutlet();
 
- //   if (!user) {
- //       return <Navigate to="/login" />;
- //   }
+    if (!localStorage.getItem("Bearer token")) {
+        return <Navigate to="/" />;
+    }
 
     return (
         <div>
