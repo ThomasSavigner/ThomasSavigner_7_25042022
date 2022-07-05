@@ -1,11 +1,9 @@
-
+import React from 'react';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-//import { Button, Form } from 'react-bootstrap';
 
 import AuthService from "../../services/auth.service";
 
-import React from 'react';
 import {Formik, Field, Form } from 'formik'
 
 import * as Yup from 'yup';
@@ -43,14 +41,6 @@ function SignInTabPane() {
 
     const loginApp =  (values, { setSubmitting }) => {
 
-       console.log(values)
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-        }, 1000);
-        
-    
-    
         AuthService.login(values.email, values.password)
             .then( () => {
                

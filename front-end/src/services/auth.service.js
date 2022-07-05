@@ -2,8 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:4039/api/auth/";
 
-const signup = (file, firstName, lastName, 
-  departmentID, email, password, passwordConfirm ) => {
+const signup = (file, firstName, lastName, departmentID, email, password, passwordConfirm ) => {
     return axios.post(API_URL + "signup", {
       file,
       firstName,
@@ -46,7 +45,7 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("Bearer token"));
 };
 
-const AuthService = {
+const AuthService = { 
   signup,
   login,
   logout,

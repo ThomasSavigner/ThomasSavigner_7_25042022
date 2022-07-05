@@ -64,36 +64,14 @@ main colors->
   width: 150px;
 }
 
-  /* left & right column */
-.img-fit {
-	object-fit: contain;
-}
-  
-.container-img-position {
-top: 5em;
-z-index: -1;
-}
-
-
-/* central column background photo */
-.background-container-position {
-  z-index: -1;
-}
-
-/* central column container */
-.main-column-position {
-  top: 5em;
-}
-
 h1 {
   font-family: Shadows Into Light Two, cursive;
   font-size: x-large;
   font-weight: 600;
 }
 
-
-
 /* login signup box */
+
 
 /* headers tabs*/
 .nav.nav-tabs .nav-link.active {
@@ -157,22 +135,63 @@ h1 {
   max-width: 100%;
 }
 
+@media (max-width: 767px) {
+  
+  
+  .box-size {
+    margin-top: 0.5em;
+    margin-left: 0.5em;
+    width: 31.5em;
+  
+  }
+}
 
 @media (min-width: 768px) {
-  .background-container-md-position {
-    left: 8.32%;
+ 
+  /* left & right column */
+  .img-fit {
+    object-fit: cover;
+  }
+    
+  .container-md-position {
+  top: 4em;
   }
 
-	.right-column-picture-md-position {
-		left: 91.70%;
-	}
+  .container-center-md-position {
+    top: 3.8em;
+  }
+
+  .left-column-md-position {
+    left: 0.2%;
+  }
+  .right-column-md-position {
+    left: 91.5%;
+  }
 
   .main-column-md-position {
-    left: 10%;
+    left: 8.2%;
   }
+
 	.position-md-fixed {
 		position: fixed !important;
 	}
 
+  .top-md-position {
+    top: 0;
+  }
 
+  .box-position {
+
+    width: 42em;
+    position: fixed;
+    left: 25%;
+    top: 20%;
+    
+  }
+}
+
+@media (min-width: 1024px) {
+  .box-position {
+    left: 30%;
+  }
 }

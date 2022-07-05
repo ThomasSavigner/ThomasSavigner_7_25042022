@@ -5,6 +5,10 @@ import '../styles/App.css';
 
 function Feeds() {
 
+//  logique pagination
+//  mapper cards sur le tableau json response....
+//  return results
+
   return (
 
     <div className="App">

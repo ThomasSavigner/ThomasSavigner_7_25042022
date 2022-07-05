@@ -1,9 +1,8 @@
 import { Navigate, useOutlet } from "react-router-dom";
-//import { useAuth } from "../../utils/useAuth";
+import React from 'react';
 
 
  const ProtectedLayout = () => {
-  //  const { token } = useAuth();
     const outlet = useOutlet();
 
     if (!localStorage.getItem("Bearer token")) {
@@ -12,8 +11,14 @@ import { Navigate, useOutlet } from "react-router-dom";
 
     return (
         <div>
-            <h1>cette route est protégée </h1>
-        {outlet}
+            {outlet}
+            <div to="/app/feeds" className="w-25 d-flex justify-content-center m-2 p-2 bg-secondary">
+                <span className="material-icons w-25 mt-1 text-light">lock</span>
+                <img src="../logos-brand/icon-left-font-monochrome-white.png" alt="logo & brand"
+                    className="logo-brand w-50 mx-2" />
+            </div>
+        
+                
         </div>
     );
 };
