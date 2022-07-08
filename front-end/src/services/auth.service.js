@@ -5,8 +5,8 @@ const API_URL = "http://localhost:4039/api/auth/";
 const signup = (file, firstName, lastName, departmentID, email, password, passwordConfirm ) => {
     return axios.post(API_URL + "signup", {
       file,
-      firstName,
       lastName,
+      firstName,
       departmentID,
       email,
       password,

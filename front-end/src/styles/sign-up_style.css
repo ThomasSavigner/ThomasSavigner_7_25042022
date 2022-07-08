@@ -158,7 +158,7 @@ h1 {
   }
 
   .container-center-md-position {
-    top: 3.8em;
+    top: 4em;
   }
 
   .left-column-md-position {
@@ -185,7 +185,7 @@ h1 {
     width: 42em;
     position: fixed;
     left: 25%;
-    top: 20%;
+    top: 10%;
     
   }
 }

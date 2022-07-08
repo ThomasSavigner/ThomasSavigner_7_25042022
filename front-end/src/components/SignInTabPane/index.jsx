@@ -37,7 +37,7 @@ function SignInTabPane() {
                 //  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,64}$/,
                 // "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
     )}
-  );
+    );
 
     const loginApp =  (values, { setSubmitting }) => {
 
