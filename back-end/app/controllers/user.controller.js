@@ -74,7 +74,7 @@ exports.userSignup = (req, res) => {
                     saveLoginTimestamp();
 
                 })
-                .catch(() => res.status(403).send("Problem: user already exist in database"))
+                .catch(() => res.status(403))
         })
         .catch(error => res.status(500).json({ error }));
 }

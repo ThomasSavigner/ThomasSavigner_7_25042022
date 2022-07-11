@@ -17,7 +17,7 @@ exports.checkPwd = (req, res, next) => {
         next();
     } else {
         const invalidPwd = pwdSchema.validate(req.body.password, { list: true });
-        return res.statut(400).json(invalidPwd);
+        return res.status(400).json(invalidPwd);
     }
 }
 
@@ -26,6 +26,6 @@ exports.confirmPwd = (req, res, next) => {
     if (req.body.password == req.body.passwordConfirm) {
         next()        
     } else {
-        return res.statut(400).json("Password inputs are not equal")
+        return res.status(400).json("Password inputs are not equal")
     }
 }

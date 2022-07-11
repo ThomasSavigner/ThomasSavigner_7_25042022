@@ -3,15 +3,19 @@ import axios from "axios";
 const API_URL = "http://localhost:4039/api/auth/";
 
 const signup = (file, firstName, lastName, departmentID, email, password, passwordConfirm ) => {
-    return axios.post(API_URL + "signup", {
+    return axios.post(API_URL + "signup",
+   
+     {
       file,
       lastName,
       firstName,
       departmentID,
       email,
       password,
-      passwordConfirm 
-  });
+      passwordConfirm
+  },
+  { headers: {"Content-Type": "multipart/form-data"}},
+  );
 };
 
 const login = (email, password) => {

@@ -1,20 +1,12 @@
 import React from 'react';
-import { Formik, Field } from "formik";
+import { useFormik } from "formik";
 import { object, string, ref } from "yup";
 
 import AuthService from "../../services/auth.service";
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
-const RegisterValidation = object().shape({
-    //file: array().min(1, "select at least one file"),
-    lastname: string().required("Required"),
-    firstname: string().required("Required"),
-    departmentID: string().required("Required"),
-    email: string().required("Valid email required").email("Valid email required"),
-    password: string().min(8, "Required").required("Required"),
-    passwordConfirm: string().required("Please confirm your password").oneOf([ref("password")], "Passwords do not match"),
-  });
+
   
   
 
@@ -24,101 +16,102 @@ function SignUpTabPane() {
     const location = useLocation();
 
     const [avatarPreview, setAvatarPreview] = React.useState('icons/default-avatar.png');
-    const [lastname, setLastname] = React.useState('');
-    const [firstname, setFirstname] = React.useState('');
-    const [departmentID, setDepartmentID] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [passwordConfirm, setPasswordConfirm] = React.useState('');
-
-    
-    const handleSubmit = (values) => {
-        
-            alert("avatarPreview :"+avatarPreview);
-            console.log("departmentID :"+departmentID);
-            console.log("email :"+email);
-             //let data = new FormData();
-             //for (let value in values) {
-             //  data.append(value, values[value]);
-             //}
-             //alert(data.toString());
-             AuthService.signup(values.file, lastname, firstname, departmentID, email, password, passwordConfirm)
-                 .then( () => {
-                     const origin = location.state?.from?.pathname || 'app/feeds';
-                     navigate(origin, {replace: true});
-                 })
-                 .catch((err) => { console.log(err); })
-        }
-
-
+  
     const handleFileOnChange = (event) => {
         
+        console.log(avatarPreview)
         const file = event.target.files[0];
-
-        //setFieldValue("file", file);
-
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
            setAvatarPreview(reader.result)   
         };
+        formik.setFieldValue("fileimg", file);
+       
+
         
     };
+
+    const formik = useFormik({
+        initialValues: {
+            file: null,
+            lastname: '',
+            firstname: '',
+            department: '',
+            email: '',
+            password: '',
+            passwordConfirm: '',
+        },
+        validationSchema: object().shape({
+            /*file: mixed().test("fileType", "*fichiers acceptés: jpg, jpeg et png",
+                    (file) => {
+                        file && ["image/png", "image/jpg", "image/jpeg"].includes(file.type)
+                    }
+                ),*/
+            lastname: string().min(2, "Minimum 2 caractères").required("Requis"),
+            firstname: string().min(2, "Minimum 2 caractères").required("Requis"),
+            department: string().required("Requis"),
+            email: string().required("email requis").email("Veuillez entrer un email valide"),
+            password: string().required("Requis")
+                        .matches(
+                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+                            "Votre mot de passe doit contenir 8 caractères minimum, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial"),
+            passwordConfirm: string().required("Confirmez votre mot de passe").oneOf([ref("password")], "veuillez saisir à nouveau votre mot de passe"),
+          }),
+        onSubmit: (values) => {
+            AuthService.signup(values.fileimg, values.lastname, values.firstname, values.department, values.email, values.password, values.passwordConfirm) 
+                .then( () => {
+                    const origin = location.state?.from?.pathname || 'app/feeds';
+                    navigate(origin, {replace: true});
+                })
+                .catch((err) => { console.log(err); })
+        },
+        
+    })
 
     return (
     <>
     <div className="tab-pane fade show border border-secondary border-2 rounded-3 color-4"
          id="signup-box" role="tabpanel" aria-labelledby="signup-tab">
-        
-        <Formik 
-        initialValues= {{
-            photobutton: '',
-            lastnameinput: '',
-            firstnameinput: '',
-            selectdepartment: '',
-            recemailinput: '',
-            passwordinput: '',
-            passwordinput2: '',
-        }}
-        validationSchema={RegisterValidation}        
-        >   
-        {( isSubmitting) => (     
-        <form className="form-horizontal px-3" onSubmit={handleSubmit} encType='multipart/form-data'>
+        <form className="px-3" onSubmit={formik.handleSubmit}>
             <fieldset>
                 <div className="form-group">
-                    <div className="mx-auto py-1 avatar-signup-container">
-                        <img className="rounded-circle thumbnail w-100 h-100 img-fit" id="defaultphoto"
-                            alt="user account icon" title="Preview profile photo" 
-                            src={avatarPreview} />
-                    </div>
                     <div className="input-group">
+                        <div className="mx-auto py-1 avatar-signup-container">
+                            <img className="rounded-circle thumbnail w-100 h-100 img-fit" id="defaultphoto"
+                                alt="user account icon" title="Preview profile photo" 
+                                src={avatarPreview} /> 
+                        </div>
                         <div className="input-group-btn mx-auto pt-1 pb-2">
-                            <button className="fileUpload btn btn-secondary btn-sm fake-shadow">
-                                <span className='font-title'>J'insère ma photo</span>
-                                <Field id="choosefilebutton" name="photobutton" type="file" accept='image/*' onChange={handleFileOnChange}  className="" />
-                            </button>
+                           <div className="fileUpload bg-secondary fake-shadow rounded">
+                                <p className='font-title text-light text-center'>J'insère ma photo</p>
+                                <input id="filecontrol" name="fileinput" type="file" onChange={handleFileOnChange} 
+                                    className="w-100 rounded"/>
+                                <p className="text-light font-title text-center">*fichiers acceptés: jpg, jpeg et png</p>  
+                            </div>
                         </div>
                     </div>
                 </div>
-               
                 <div className="form-group">
                     <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm">
-                        <input id="lastnameinput" name="lastnameinput" type="text" placeholder="nom" 
-                            onChange={(event) => setLastname(event.target.value)} value={lastname} className="form-control" required=""/>
+                        <input id="lastnameinput" name="lastname" type="text" placeholder="nom" 
+                            onChange={formik.handleChange} value={formik.values.lastname} className="form-control w-100"/>
+                         {formik.errors.lastname && formik.touched.lastname && (
+                        <p className="text-danger font-title">{formik.errors.lastname}</p> )}
                     </div>
                 </div>
-                
                 <div className="form-group"> 
                     <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm">
-                        <input id="firstnameinput" name="firstnameinput" type="text" placeholder="prénom"
-                             onChange={(event) => setFirstname(event.target.value)} value={firstname} className="form-control" required=""/>
+                        <input id="firstnameinput" name="firstname" type="text" placeholder="prénom"
+                             onChange={formik.handleChange} value={formik.values.firstname} className="form-control w-100"/>
+                         {formik.errors.firstname && formik.touched.firstname && (
+                            <p className="text-danger font-title">{formik.errors.firstname}</p> )}
                     </div>
                 </div>
-            
                 <div className="form-group">
-                    <div className="col-6 col-md-4 mx-auto mt-2">
-                        <select name="departments" id="selectdepartment" 
-                            onChange={(event) => setDepartmentID(event.target.value)} value={departmentID} className="form-control bg-secondary font-title text-light">
+                    <div className="col-8 col-md-4 mx-auto mt-2">
+                        <select  id="departmentinput" name="department" 
+                            onChange={formik.handleChange} value={formik.values.department} className="bg-secondary font-title text-light rounded">
                             <option value='' label="- département -" className="text-center">- département -</option>
                             <option value='1' label="Administration">Administration</option>
                             <option value='2' label="Finances">Finances</option>
@@ -127,40 +120,42 @@ function SignUpTabPane() {
                             <option value='5' label="Marketing">Marketing</option>
                             <option value='6' label="Logistique">Logistique</option>
                         </select>
-                    </div>
-                </div>
-
-
-                <div className="form-group">
-                    <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm">
-                        <input id="rec-emailinput" name="recemailinput" type="email" placeholder="email"
-                             onChange={(event) => setEmail(event.target.value)} value={email} className="form-control"/>
+                        {formik.errors.department && formik.touched.department && (
+                            <p className='text-danger font-title'>{formik.errors.department}</p> )}
                     </div>
                 </div>
                 <div className="form-group">
                     <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm">
-                        <input id="passwordinput1" name="passwordinput" type="password" placeholder="mot de passe"
-                            onChange={(event) => setPassword(event.target.value)} value={password} className="form-control"/>
+                        <input id="emailinput" name="email" type="email" placeholder="email"
+                             onChange={formik.handleChange} value={formik.values.email} className="form-control w-100"/>
+                        {formik.errors.email && formik.touched.email && (
+                            <p className="text-danger font-title">{formik.errors.email}</p> )}
                     </div>
                 </div>
                 <div className="form-group">
                     <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm">
-                        <input id="passwordinput2" name="passwordinput2" type="password" placeholder="mot de passe"
-                            onChange={(event) => setPasswordConfirm(event.target.value)} value={passwordConfirm} className="form-control"/>
+                        <input id="passwordinput" name="password" type="password"  autoComplete="on" placeholder="mot de passe"
+                            onChange={formik.handleChange} value={formik.values.password} className="form-control w-100"/>
+                        {formik.errors.password && formik.touched.password && (
+                            <p className="text-danger font-title">{formik.errors.password}</p> )}
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="col-3 col-md-1 mx-auto my-3">
-                        <button id="submitbutton" name="submitbutton" type="submit" disabled={isSubmitting} className="btn btn-sm btn-secondary">Save</button>
+                    <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm">
+                        <input id="passwordinput2" name="passwordConfirm" type="password"  autoComplete="on" placeholder="mot de passe"
+                            onChange={formik.handleChange} value={formik.values.passwordConfirm} className="form-control w-100"/>
+                        {formik.errors.passwordConfirm && formik.touched.passwordConfirm && (
+                            <p className="text-danger font-title">{formik.errors.passwordConfirm}</p> )}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <div className="col-5 col-md-4 my-3 mx-auto">
+                        <input id="submitbutton" name="submitbutton" type="submit" className="bg-secondary font-title text-light rounded" value="Soumettre" />
                     </div>
                 </div>
             </fieldset>
         </form>
-        )}
-    </Formik>
-    
     </div>
-
     </>
     );
                 };

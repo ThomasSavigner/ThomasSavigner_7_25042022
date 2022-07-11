@@ -17,27 +17,14 @@ function SignInTabPane() {
 
     const yupSchema = Yup.object({
         email: Yup.string()
-            .email('Invalid email address')
-            .required('Email is required'),
+            .email('email invalide')
+            .required('Votre email professionnel requis'),
         password: Yup.string()
-            .required('Password is required')
+            .required('Mot de passe requis')
             .matches(
-                //  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8, 64}$/,
-                //  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-                //  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                //  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                //  "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character")
-                //  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,  
-                //  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,64}$/,
-                //  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-                //  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-                //  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]).{8,32}$/,  
-                //  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/,  
-                //  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/, 
-                //  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,64}$/,
-                // "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
-    )}
-    );
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+                "Votre mot de passe doit contenir 8 caractères minimum, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial")
+    });
 
     const loginApp =  (values, { setSubmitting }) => {
 
@@ -86,7 +73,7 @@ function SignInTabPane() {
                                 </div>
                                  <div className="form-group d-flex flex-column align-items-center mt-3">
                                      <div className="col-8 col-md-4 w-100 input-group input-group-sm">
-                                         <Field name="password" type="password" 
+                                         <Field name="password" type="password"  autoComplete="on"
                                             className={(formik.touched.password && formik.errors.password) ? 'form-control is-invalid font-text' : 'form-control font-text'} />
                                             {formik.touched.password && formik.errors.password ? (
                                                 <div className="invalid-feedback">{formik.errors.password}</div> ) : null}
