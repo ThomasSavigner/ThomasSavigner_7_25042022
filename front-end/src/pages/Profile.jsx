@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-import '../styles/App.css';
+
 
 function Profile() {
 
   return (
 
-    <div className="">
+    <div>
       <nav>
         
         <Link to="/app/feeds">Mosaïque</Link>

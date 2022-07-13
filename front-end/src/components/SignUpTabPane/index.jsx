@@ -7,9 +7,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 
 
-  
-  
-
 function SignUpTabPane() {
 
     const navigate = useNavigate();
@@ -18,7 +15,6 @@ function SignUpTabPane() {
     const [avatarPreview, setAvatarPreview] = React.useState('icons/default-avatar.png');
   
     const handleFileOnChange = (event) => {
-        
         console.log(avatarPreview)
         const file = event.target.files[0];
         let reader = new FileReader();
@@ -27,9 +23,6 @@ function SignUpTabPane() {
            setAvatarPreview(reader.result)   
         };
         formik.setFieldValue("fileimg", file);
-       
-
-        
     };
 
     const formik = useFormik({
@@ -109,7 +102,7 @@ function SignUpTabPane() {
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="col-8 col-md-4 mx-auto mt-2">
+                    <div className="col-8 col-md-5 mx-auto mt-2">
                         <select  id="departmentinput" name="department" 
                             onChange={formik.handleChange} value={formik.values.department} className="bg-secondary font-title text-light rounded">
                             <option value='' label="- département -" className="text-center">- département -</option>

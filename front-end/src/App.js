@@ -10,7 +10,7 @@ import NotFound from './pages/NotFound';
 import PublicLayOut from './components/PublicLayOut/index'
 import ProtectedLayout from './components/ProtectedLayout/index';
 
-import './styles/App.css'
+import './styles/style.css';
 
 function App() {
 

@@ -66,7 +66,7 @@ function SignInTabPane() {
                                      <div className="col-8 col-md-4 w-100 input-group input-group-sm">
                                          <Field name="email"
                                             className={(formik.touched.email && formik.errors.email) ? 'form-control is-invalid font-text' : 'form-control font-text'}
-                                            type="email" />
+                                            placeholder="Email" type="email" />
                                              {formik.touched.email && formik.errors.email ? (
                                                 <div className="invalid-feedback">{formik.errors.email}</div>) : null}
                                     </div>
@@ -74,7 +74,8 @@ function SignInTabPane() {
                                  <div className="form-group d-flex flex-column align-items-center mt-3">
                                      <div className="col-8 col-md-4 w-100 input-group input-group-sm">
                                          <Field name="password" type="password"  autoComplete="on"
-                                            className={(formik.touched.password && formik.errors.password) ? 'form-control is-invalid font-text' : 'form-control font-text'} />
+                                            className={(formik.touched.password && formik.errors.password) ? 'form-control is-invalid font-text' : 'form-control font-text'} 
+                                                placeholder="Password" />
                                             {formik.touched.password && formik.errors.password ? (
                                                 <div className="invalid-feedback">{formik.errors.password}</div> ) : null}
                                      </div>

@@ -1,10 +1,8 @@
 import * as React from 'react';
-
 import { Nav, Col, Tab, Container } from 'react-bootstrap';
-
 import SignInTabPane from '../components/SignInTabPane/index'
 import SignUpTabPane from '../components/SignUpTabPane/index'
-import '../styles/sign-up_style.css';
+
 
 
 function Login() {  
@@ -14,15 +12,8 @@ function Login() {
     <>
 
 <Container className="nav-display position-md-fixed top-md-position rounded color-3 d-flex justify-content-between border border-light border-2 p-3" fluid>
-  <div>
-    <img src="../../logos-brand/icon-left-font-monochrome-white.png" alt="logo and brand" className="logo-brand" />
-  </div>
-  <div>  
-    <h1 className="fs-4 text-light">GroupoSpeak</h1>                
-  </div>
+    <h1 className="fs-4 text-light">GroupoSpeak</h1>
 </Container>
-
-
 
 <Container className="" fluid>
   <div className="d-none d-md-block col-md-1 bg-dark bg-opacity-25 p-0 position-md-fixed vh-100 container-md-position left-column-md-position">
@@ -39,9 +30,9 @@ function Login() {
   </div>
 </Container>
 
-<div className="box-position">
+<div className="box-sm-position box-md-position box-lg-position">
 <Tab.Container id="signInTab" defaultActiveKey="SignIn" >
-      <Col className='flex-column align-items-center box-size'>
+      <Col className='flex-column align-items-center'>
                 <Nav className="w-50 px-0" variant="tabs">
                   <Nav.Item className="color-1 w-50 d-flex justify-content-center">
                     <Nav.Link eventKey="SignIn" className='text-light font-title'>Connexion</Nav.Link>
