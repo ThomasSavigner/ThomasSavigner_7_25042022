@@ -35,21 +35,7 @@ exports.createPost = (req, res) => {
 }
 
 exports.feedsProvider = (req, res) => {
-
-    let limit = 5;
-    let offset = 0;
-    
-    Post.findAndCountAll({
-            where: {
-                isPublish: true,
-            }
-         })
-        .then((data) => {
-            let page = req.params['page'];
-            let pages = Math.ceil(data.count / limit);
-            
-            offset = limit * (page - 1);
-            
+         
             Post.findAll({
                 where: {
                     isPublish: true,
@@ -66,17 +52,11 @@ exports.feedsProvider = (req, res) => {
                         attributes: ['name'],
                     }],
                 }],
-                limit: limit,
-                offset: offset,
                 order: [['postCommentsModifiedAt', 'DESC']]
-            })
+                })
                 .then((posts) => {
-                    res.status(200).json({'result': posts, 'count': data.count, 'pages': pages});
+                    res.status(200).json({'result': posts/*, 'count': data.count, 'pages': pages*/});
                 });
-        })
-        .catch(function (error) {
-            res.status(500).send('Internal Server Error');
-        });
 }
 
 exports.feedsAtLogin = (req, res) => {

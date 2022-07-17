@@ -141,7 +141,9 @@ h1 {
   left: 12.5%;
   bottom:1.5em;
 }
-
+.linktoppage-margin {
+  margin-bottom: 4em;
+}
 
 
 @media (min-width: 576px) {

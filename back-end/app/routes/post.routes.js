@@ -4,10 +4,10 @@ const authentication = require("../middleware/tokenAuth");
 const multer = require("../middleware/multer-config_image");
 
 router.post("/", authentication, multer, postCtrl.createPost);
-router.get("/:page", authentication, postCtrl.feedsProvider);
+router.get("/all", authentication, postCtrl.feedsProvider);
 router.get("/top/:limit", authentication, postCtrl.getTopPosts);
 router.get("/last/:limit", authentication, postCtrl.getTheNLastPosts);
-router.get("/login/:page", authentication, postCtrl.feedsAtLogin);
+router.get("/login/:page", authentication, postCtrl.feedsAtLogin);      //route'll be used in production mode 
 router.get("/post/:postID", authentication, postCtrl.focusOnPostandComments);
 router.get("/:userID/:page", authentication, postCtrl.getAllMyPosts);
 router.put("/:postID", authentication, multer, postCtrl.updatePost);
