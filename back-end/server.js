@@ -11,11 +11,18 @@ const commentRoutes = require("./app/routes/comment.routes");
 //const fakeComment = require("./fake-seeds.comments");
 
 // use of CORS
+app.use((req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", "*")
+	res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization")
+	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+	next()
+})
+/*
 var corsOptions = {
   origin: "http://localhost:3000"
 };
 app.use(cors(corsOptions));
-
+*/
 // parse requests of content-type - application/json
 app.use(express.json());
 
@@ -47,8 +54,8 @@ app.get("/", (req, res) => {
 );
 
 //  enable the files download from/to the in server's folders
-app.use("/images", express.static( path.join(__dirname, "/uploads/user-avatars") ));
-app.use('uploads/post-images', express.static( path.join(__dirname, '/uploads/post-images') ));
+app.use('/uploads/user-avatars', express.static( path.join(__dirname, '/uploads/user-avatars') ));
+app.use('/uploads/post-images', express.static( path.join(__dirname, '/uploads/post-images') ));
 
 //  Add data
 //fakeUser.createFakeUsers()

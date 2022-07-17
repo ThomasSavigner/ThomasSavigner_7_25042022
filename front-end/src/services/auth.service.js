@@ -28,7 +28,7 @@ const login = (email, password) => {
       if (response.data.token) {
         localStorage.setItem(
             "Bearer token",
-            JSON.stringify(response.data));
+            JSON.stringify(response.data.token));
       }
 
       return response.data;

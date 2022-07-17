@@ -26,7 +26,7 @@ exports.userSignup = (req, res) => {
 
 	let avatarUrl = `${req.protocol}://${req.get("host")}/uploads/user-avatars/default-avatar.png`;
 	if (req.file) {
-		avatarUrl = `${req.protocol}://${req.get("host")}//uploads/user-avatars/${req.file.filename}`
+		avatarUrl = `${req.protocol}://${req.get("host")}/uploads/user-avatars/${req.file.filename}`
 	}
 
 	// crypt password

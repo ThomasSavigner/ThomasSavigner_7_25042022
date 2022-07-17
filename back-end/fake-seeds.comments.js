@@ -14,7 +14,7 @@ exports.createFakeComments = () => {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
         
-        const rndInt2 = randomIntFromInterval(1276, 1360);
+        const rndInt2 = randomIntFromInterval(171, 255);
         //************* */
         Post.findOne( {where: {postID:rndInt2}} )
             .then((post)=>{

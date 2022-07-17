@@ -11,6 +11,7 @@ import PublicLayOut from './components/PublicLayOut/index'
 import ProtectedLayout from './components/ProtectedLayout/index';
 
 import './styles/style.css';
+import './styles/cardpost-style.css'
 
 function App() {
 

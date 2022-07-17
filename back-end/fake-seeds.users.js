@@ -30,7 +30,7 @@ exports.createFakeUsers = () => {
         });
 
         //************* */
-        let avatarUrl = `http://localhost:4039//uploads/user-avatars/${newFileName}`;
+        let avatarUrl = `http://localhost:4039/uploads/user-avatars/${newFileName}`;
         //************* */
         function randomIntFromInterval(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
@@ -43,7 +43,7 @@ exports.createFakeUsers = () => {
         const firstLetter = oneFirstName[0];
         const mail = firstLetter.toLowerCase() + oneLastName.toLowerCase() + '@groupomania.fr';
         //*************** */
-        const pwd = `LmEaHy4h67[gs]+`;
+        const pwd = `Lm#EaHy4h67gs+@`;
         
         const hash = bcrypt.hashSync(pwd, 10);
 

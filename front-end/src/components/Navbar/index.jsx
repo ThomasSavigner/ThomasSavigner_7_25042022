@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavLink } from "react-router-dom";
-
+import BoxNotifications from '../BoxNotifications';
 
 export default function Navbar() {
   
@@ -8,10 +8,10 @@ export default function Navbar() {
 
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark">
+    <nav className="navbar navbar-expand-md navbar-dark navbar-position">
           
-          <ul className="navbar-nav me-auto flex-row justify-content-between color-1 rounded navbar-position position-list
-                     position-md-static list-width-md mx-auto mx-md-2 my-5 my-md-0 w-75 font-title">
+          <ul className="navbar-nav flex-row justify-content-between color-1 rounded navbar-position position-list
+                     position-md-static list-width-md mx-auto mx-md-2 my-5 my-md-0 font-title">
               <li className="nav-item li-navbar-size">
                 <NavLink id="mosaiklink" className="nav-link d-flex flex-column align-items-center text-light" to="/app/feeds">
                   <span className="material-icons mx-3">hub</span>
@@ -37,11 +37,7 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="nav-item li-navbar-size mx-md-1">
-                <ul id="notificationslink" className="nav-link d-flex flex-column align-items-center text-light" href="#">
-                  <span className="material-icons mx-3">notifications</span>
-                  <span className="material-icons mx-3 d-none">notifications_active</span>
-                  <span className="d-none d-md-block">Notifications</span>
-                </ul>
+                <BoxNotifications/>
               </li>
             </ul>
         </nav>

@@ -24,7 +24,7 @@ exports.createFakePosts= () => {
         function randomIntFromInterval(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min);
         }
-        const rndInt = randomIntFromInterval(151, 300);
+        const rndInt = randomIntFromInterval(301, 450);
         //************* */
         const stringHashtags = `#${faker.random.word()} #${faker.random.word()} #${faker.random.word()}`;
         //************* */
@@ -37,7 +37,7 @@ exports.createFakePosts= () => {
         const readingsNumber = randomIntFromInterval(1, 60);
         
         let usersArray = [];
-        for (y= 151; y < 300; y++) {
+        for (y= 301; y < 450; y++) {
             usersArray.push(y);
         }
         let readersArray = usersArray.sort(() => Math.random() - Math.random()).slice(0, readingsNumber)

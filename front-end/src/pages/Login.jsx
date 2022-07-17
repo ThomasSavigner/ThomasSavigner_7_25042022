@@ -30,7 +30,7 @@ function Login() {
   </div>
 </Container>
 
-<div className="box-sm-position box-md-position box-lg-position">
+<div className="box-position box-sm-position box-md-position box-lg-position">
 <Tab.Container id="signInTab" defaultActiveKey="SignIn" >
       <Col className='flex-column align-items-center'>
                 <Nav className="w-50 px-0" variant="tabs">
