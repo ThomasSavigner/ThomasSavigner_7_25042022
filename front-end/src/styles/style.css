@@ -144,7 +144,9 @@ h1 {
 .linktoppage-margin {
   margin-bottom: 4em;
 }
-
+.avatar-dropdown {
+  width: 4em;
+}
 
 @media (min-width: 576px) {
   

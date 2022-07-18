@@ -5,7 +5,7 @@ const API_URL = "http://localhost:4039/api/posts/";
 
 
 const getFeeds = () => {
-    return axios.get( API_URL + "all",  {headers: authHeader()}  );
+    return axios.get( API_URL + "all",  {headers: authHeader()} );
 }
 
 

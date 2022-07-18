@@ -59,9 +59,17 @@ exports.userSignup = (req, res) => {
                     
                     res.status(200)
                         .send({
-                            statut: "User account created",
+                            status: "User account created",
                             //  token generation
-                            token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })
+                            token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' }),
+                            
+                            //  sending data stored to the front to custom user interface
+                            user: { 
+                                avatar: user.avatarUrl,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                email: user.email,
+                            }
                         })
 
                     saveLoginTimestamp = () => { 
@@ -107,9 +115,16 @@ exports.userLogin = (req, res) => {
                         }
 
                         res.status(200).send( {
-                            statut: "Logged in user",
+                            status: "Logged in user",
                             //  token generation
-                            token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' })
+                            token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' }),
+                            //  sending data stored to the front to custom user interface
+                            user: { 
+                                avatar: user.avatarUrl,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                email: user.email,
+                            }
                         } );
 
                         const saveLoginTimestamp = () => { 

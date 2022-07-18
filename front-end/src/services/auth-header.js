@@ -3,7 +3,7 @@ export default function authHeader() {
   
     if (token) {
       //return { 'x-access-token': token };
-      return {"Authorization": 'bearer ' + token}         // for Node.js Express back-end, set token to authorization headers in order
+      return {"Authorization": 'Bearer ' + token}         // for Node.js Express back-end, set token to authorization headers in order
     } else {                                      // to validate auth request
       return {};
     }
