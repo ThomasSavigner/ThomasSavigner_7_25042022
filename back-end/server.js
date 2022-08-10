@@ -31,10 +31,18 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // ****   connection & synchronization app models with database
-db.sequelize.sync({/*force: true*/})
+db.sequelize.sync({ /*alter: true*/ /*force: true*/})
   .then( () => { 
     console.log("Synchronization models/database complete");
- });
+  })
+  .then( () => {
+        
+    //*** Add data */  
+    //fakeUser.createFakeUser()
+    //fakePost.createFakePosts()
+    //fakeComment.createFakeComments()
+    
+  })
 
 
 //  the user routes will be use for all requests to /api/auth
@@ -56,12 +64,6 @@ app.get("/", (req, res) => {
 //  enable the files download from/to the in server's folders
 app.use('/uploads/user-avatars', express.static( path.join(__dirname, '/uploads/user-avatars') ));
 app.use('/uploads/post-images', express.static( path.join(__dirname, '/uploads/post-images') ));
-
-//  Add data
-//fakeUser.createFakeUsers()
-//fakePost.createFakePosts()
-//fakeComment.createFakeComments()
-
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

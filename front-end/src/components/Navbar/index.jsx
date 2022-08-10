@@ -25,7 +25,7 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="nav-item li-navbar-size">
-                <NavLink className="nav-link d-flex flex-column align-items-center text-light" to="/app/post">
+                <NavLink className="nav-link d-flex flex-column align-items-center text-light" to="/app/postit">
                   <span className="material-icons mx-3">chat</span>
                   <span className="d-none d-md-block">Post</span>
                 </NavLink>

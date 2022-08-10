@@ -11,17 +11,17 @@ function Feeds() {
   const [ currentPage, setCurrentPage ] = React.useState(1);
   const postsPerPage= 10;
 
-  const callingFeeds = () => {
+  const callingFeeds = React.useCallback(() => {
     postService.getFeeds()
         .then( (res) => { 
           setArrayPosts(res.data.result)
         } )
         .catch((error)=> console.log(error))
-  }
-  
+  }, [])
+  console.log("log")
   React.useEffect(() => {
     callingFeeds()
-  }, [])
+  }, [callingFeeds])
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -50,6 +50,7 @@ function Feeds() {
       {
         currentPosts.map((post) => (     
           <CardPost   key={post.postID}
+                      postID={post.postID}
                       avatarUrl={post.userP.avatarUrl}
                       firstName={post.userP.firstName}
                       lastName={post.userP.lastName}

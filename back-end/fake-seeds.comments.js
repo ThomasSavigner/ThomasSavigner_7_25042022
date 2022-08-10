@@ -1,4 +1,5 @@
 const db = require("./app/models");
+const User = db.Users;
 const Post = db.Posts;
 const Comment = db.Comments;
 const faker = require('@faker-js/faker/locale/fr');
@@ -6,35 +7,61 @@ const faker = require('@faker-js/faker/locale/fr');
 
 exports.createFakeComments = () => {
     
-    for (i = 0; i < 150; i++) {
+    let fieldsArray =[];        
 
+    for (let j=531; j<691; j++) {
         
-        /************* */
-        function randomIntFromInterval(min, max) {
-            return Math.floor(Math.random() * (max - min + 1) + min);
-        }
+        const setIdFields = function() {
+            return (Post.findByPk(j)
+                        .then( function(response) {
+                            if (response !== null) {
+                                const dataSet = {
+                                    postID: response.dataValues.postID,
+                                    readersArray: JSON.parse(response.dataValues.readers), 
+                                }
+                                return dataSet
+                            }
+                        })
+            )
+        }  
+               
+        const getIdFields = setIdFields()
         
-        const rndInt2 = randomIntFromInterval(171, 255);
-        //************* */
-        Post.findOne( {where: {postID:rndInt2}} )
-            .then((post)=>{
-                let readersArray = post.readers;
-                const userID =  readersArray[Math.floor(Math.random() * readersArray.length)];
-                const myComment ={
-                    userID: userID,
-                    postID: rndInt2,
-                    content: faker.lorem.paragraph(2),
+        const plug =()=> getIdFields.then(function(result) {
+            return result
+        })
+
+        fieldsArray.push(plug())
+   
+    }
+                                           
+    Promise.all( fieldsArray )
+            .then((fieldsArrayValues ) => {
+                let myComments = []
+                
+                for (k=0; k<10; k++) {
+                
+                    const postSelected = fieldsArrayValues[Math.floor(Math.random() * fieldsArrayValues.length)];
+                    const postID = postSelected.postID;
+                    const commentWriter = postSelected.readersArray[Math.floor(Math.random() * postSelected.readersArray.length)];
+                    
+                    const myComment ={
+                            userID: commentWriter,
+                            postID: postID,
+                            content: faker.lorem.paragraph(3),
+                    }
+                    
+                    myComments.push(myComment);
+
                 }
 
-                Comment.create(myComment)
-                    .then( (valid) => {
-                        if (!valid) {
-                            return console.log("Comment not valid")
-                        }
-                        console.log("comment saved in DB")
-                    })
-                    .catch( (err) =>{ console.log("Big Problem while saving to DB:" + err)})
+                Comment.bulkCreate(myComments)
+                        .then( (response) => {
+                            console.log(response)
+                            console.log("commentS saved in DB")
+                        })
+                        .catch( (err) =>{ console.log("Big Problem while saving to DB:" + err)})
             })
             .catch((err) => { console.log(err)})
-    }
+
 }

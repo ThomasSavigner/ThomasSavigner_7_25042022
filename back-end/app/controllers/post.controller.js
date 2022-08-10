@@ -93,7 +93,7 @@ exports.feedsAtLogin = (req, res) => {
                             }
                         },
                         attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
-                                        'postCommentsModifiedAt', 'readings', 'likes',
+                                        'createdAt','postCommentsModifiedAt', 'readings', 'likes',
                                     ],
                         include: [{
                             association: 'userP',
@@ -125,7 +125,7 @@ exports.focusOnPostandComments = (req, res) => {
                 postId: req.params['postID'],
             },
             attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
-                            'postCommentsModifiedAt', 'readings', 'readers',
+                            'createdAt', 'postCommentsModifiedAt', 'readings', 'readers',
                             'likes', 'likers',
             ],
             include: [{
@@ -140,7 +140,7 @@ exports.focusOnPostandComments = (req, res) => {
                 where: {
                     isPublish: true
                 },
-                attributes: ['userID', 'postID', 'content'],
+                attributes: ['commentID', 'userID', 'postID', 'content', 'createdAt'],
                 include: [{
                     association: 'userC',
                     attributes: ['firstName', 'lastName', 'avatarUrl'],
@@ -154,8 +154,8 @@ exports.focusOnPostandComments = (req, res) => {
                     where: {postID:req.params['postID']}
                     })
                     .then((post)=>{
-                        let readingsNbr = post.readings+1
-                        let readersArray = post.readers
+                        let readingsNbr = post.readings+1;
+                        let readersArray = post.readers;
                         readersArray.push(req.auth.tokenUserId);
                         post.set({
                             readings:readingsNbr,
@@ -165,7 +165,7 @@ exports.focusOnPostandComments = (req, res) => {
                             .then(
                                 console.log("reading inc, reader added ; Post updated")  
                             )   
-                            .catch((error) => res.status(500).send( {error : "Problem while saving new reader, try again" } ))
+                            .catch((error) => res.status(500).send("Problem while saving new reader, try again - error"+error ))
                     })
             }
 
@@ -177,7 +177,7 @@ exports.focusOnPostandComments = (req, res) => {
                 heartHasColor = false;
             }
 
-            res.status(200).json({'Focus on Post & its comments :-->': data,  'heartHasColor --->': heartHasColor})
+            res.status(200).json({'postComments': data,  'heartHasColor': heartHasColor})
         })
         .catch((err) => { res.status(404).send("I don't find it ! Try again...later...")})
 

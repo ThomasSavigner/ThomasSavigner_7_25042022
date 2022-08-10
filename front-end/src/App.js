@@ -23,7 +23,7 @@ function App() {
                 </Route>
                 <Route path="/app" element={<ProtectedLayout />} >
                     <Route path="feeds" element={<Feeds />} />
-                    <Route path="post" element={<CreatePost />} />
+                    <Route path="postit" element={<CreatePost />} />
                     <Route path=":postID" element={<FocusOnPost />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="mypublications" element={<MyPublications />} />

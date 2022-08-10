@@ -9,7 +9,7 @@
 }
 
 .avatar-width {
-  max-width: 4em;
+  max-width: 2.5em;
 }
 
 .text-article {
@@ -19,7 +19,6 @@
 }
 .imgcontainer-position {
   width: auto;
-  
 }
 .imgphoto-position {
   width:auto;
@@ -29,8 +28,6 @@
 
 
 @media (min-width: 576px) {
-
-
 
 }
 
