@@ -11,8 +11,8 @@ const FocusOnPost= () => {
 
   const [ articleContent, setArticleContent ] = React.useState([]);
   const [ articleComments, setArticleComments ] = React.useState([]);
-  
-  console.log("log")
+  const [ readingsNbr, setReadingsNbr ] = React.useState(null);
+  const [ heartColor, setHeartColor ] = React.useState(false);
 
   React.useEffect(()=> {
 
@@ -24,12 +24,14 @@ const FocusOnPost= () => {
         body.push(response.data.postComments);
         setArticleContent(body);
 
+        setReadingsNbr(response.data.readingsNbr);
+        setHeartColor(response.data.heartHasColor);
+        
         let commentsArray = response.data.postComments.pstComments;
         let comments = [];
         for (let u = 0; u < commentsArray.length; u++) {
           comments.push(response.data.postComments.pstComments[u]);
         }
-
         setArticleComments(comments);
 
       } catch (error) {
@@ -57,8 +59,9 @@ const FocusOnPost= () => {
            hashtags={post.hashtags}
            article={post.article}
            imageUrl={post.imageUrl}
-           readings={post.readings}
+           readings={readingsNbr}
            likes={post.likes}
+           heartColor={heartColor}
     />
 
     ))

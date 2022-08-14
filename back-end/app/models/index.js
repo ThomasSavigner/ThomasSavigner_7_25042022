@@ -79,14 +79,15 @@ db.Comments.belongsTo(db.Users, {
 );
 
 //posts-comments - 1:M association
-db.Posts.hasMany(db.Comments, {
-  as: "pstComments",
-  foreignKey: "postID",
+db.Posts.hasMany(db.Comments, 
+  {
+    as: "pstComments",
+    foreignKey: "postID"
   }
 );
 db.Comments.belongsTo(db.Posts, {
   as: "postC",
-  foreignKey: "postID",
+  foreignKey: "postID"
   }
 );
 module.exports = db;

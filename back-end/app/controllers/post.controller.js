@@ -52,7 +52,7 @@ exports.feedsProvider = (req, res) => {
                         attributes: ['name'],
                     }],
                 }],
-                order: [['postCommentsModifiedAt', 'DESC']]
+                order: [['postID', 'DESC']]
                 })
                 .then((posts) => {
                     res.status(200).json({'result': posts/*, 'count': data.count, 'pages': pages*/});
@@ -137,8 +137,9 @@ exports.focusOnPostandComments = (req, res) => {
                 }],
             }, {
                 association: 'pstComments',
+                required: false,
                 where: {
-                    isPublish: true
+                    isPublish: true,
                 },
                 attributes: ['commentID', 'userID', 'postID', 'content', 'createdAt'],
                 include: [{
@@ -148,38 +149,46 @@ exports.focusOnPostandComments = (req, res) => {
             }],
         })
         .then((data) => {
-            const everRead = data.readers.includes(req.auth.tokenUserId)
-            if (!everRead) {    //  increment post.readings, save reader
-                Post.findOne({
-                    where: {postID:req.params['postID']}
-                    })
-                    .then((post)=>{
-                        let readingsNbr = post.readings+1;
-                        let readersArray = post.readers;
-                        readersArray.push(req.auth.tokenUserId);
-                        post.set({
-                            readings:readingsNbr,
-                            readers: readersArray,
-                        })
-                        post.save()
-                            .then(
-                                console.log("reading inc, reader added ; Post updated")  
-                            )   
-                            .catch((error) => res.status(500).send("Problem while saving new reader, try again - error"+error ))
-                    })
-            }
 
-            //  Did the readers ever like post ?
-            let heartHasColor = "";
+            //  Process to update post data if user ever read post or not
+            let readingsNbr = null;
+            const everRead = data.readers.includes(req.auth.tokenUserId);
+            if (!everRead) {    //  increment post.readings, save reader
+                readingsNbr = data.readings+1;
+                let readersArray = data.readers;
+                readersArray.push(req.auth.tokenUserId);
+                         
+                data.set({
+                    readings: readingsNbr,
+                    readers: readersArray,
+                })
+                data.save()
+                    .then(console.log("reading inc, reader added ; Post updated"))   
+                    .catch((error) => res.status(500).send("Problem while saving new reader, try again - error"+error ))
+               
+            } else {
+                readingsNbr = data.readings;
+            }
+            
+            //  does user ever like post ?
+            let heartHasColor = false;
             if (data.likers.includes(req.auth.tokenUserId)) {
                 heartHasColor = true;    
-            } else {        //  Boolean variable for customizing user front interface
-                heartHasColor = false;
             }
 
-            res.status(200).json({'postComments': data,  'heartHasColor': heartHasColor})
+            let result = [data, readingsNbr, heartHasColor]
+
+            return result
         })
-        .catch((err) => { res.status(404).send("I don't find it ! Try again...later...")})
+        .then((result) => {
+        
+            let post = result[0];
+            let readings = result[1];
+            let heartHasColor = result[2];
+
+            res.status(200).json({'postComments': post, 'readingsNbr': readings, 'heartHasColor': heartHasColor})
+        })
+        .catch((err) => { res.status(404).send("I don't find it ! Try again...later... Here is the error :  "+err )})
 
 }
 

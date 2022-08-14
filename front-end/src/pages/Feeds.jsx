@@ -18,7 +18,7 @@ function Feeds() {
         } )
         .catch((error)=> console.log(error))
   }, [])
-  console.log("log")
+  
   React.useEffect(() => {
     callingFeeds()
   }, [callingFeeds])
