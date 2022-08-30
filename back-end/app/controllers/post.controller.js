@@ -1,15 +1,17 @@
 
-//  imports
+//-----       imports       -----
 
 const fs = require("fs");
 const { Sequelize } = require("../models");
 const db = require("../models");
 const Post = db.Posts;
 const User = db.Users;
-
 const Op = Sequelize.Op;
 
-//        controllers for CRUD operations on posts table and associates
+
+
+
+//-----     controllers for CRUD operations on posts table and associates     -----
 
 exports.createPost = (req, res) => {
 
@@ -41,7 +43,7 @@ exports.feedsProvider = (req, res) => {
                     isPublish: true,
                 },
                 attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
-                                'postCommentsModifiedAt', 'readings', 'likes',
+                                'postCommentsModifiedAt', 'readings', 'likes', 'numberOfComments',
                             ],
                 include: [{
                     
@@ -110,11 +112,11 @@ exports.feedsAtLogin = (req, res) => {
                         .then((posts) => {          //  ******* add next page: bool
                             res.status(200).json({'result': posts, 'count': data.count, 'pages': pages});
                         })
-                        .catch((err) => { res.status(404).send("Problem at results pagination")});
+                        .catch((err) => { res.status(404).send("Problem at results pagination : "+err)});
                     })
 
         })
-        .catch((err) => { res.status(404).send("User not found !")})
+        .catch((err) => { res.status(404).send("User not found ! : "+err)})
 
 }
 
@@ -126,7 +128,7 @@ exports.focusOnPostandComments = (req, res) => {
             },
             attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
                             'createdAt', 'postCommentsModifiedAt', 'readings', 'readers',
-                            'likes', 'likers',
+                            'likes', 'likers', 'numberOfComments',
             ],
             include: [{
                 association: 'userP',
@@ -361,38 +363,39 @@ exports.deleteAllMyPostsAndCo = (req, res) => {
     
     const userIDValue = parseInt(req.params['userID'])
 
-    if (userIDValue !== req.auth.tokenUserId) {
-        res.status(403).send("Deletion process cancelled: you're not the posts owner !")
+    if ( userIDValue !== req.auth.tokenUserId ) {
+        res.status(403).send( "Deletion process cancelled: you're not the posts owner !" )
     }
 
-    Post.findAndCountAll({
+    Post.findAndCountAll( {
             where: {
                 userID: req.params['userID'],
                 isPublish: true,
             }
-        })
-        .then((data) => {
+        } )
+        .then( (data) => {
             
             for (i=0; i < data.count; i++) {
+                
                 const filename = data.rows[i]['imageUrl'].split('/uploads/post-images/')[1];
-                fs.unlink(`./uploads/post-images/${filename}`, () => {
-                    console.log("files deleted")
-                })
+                
+                fs.unlink( `./uploads/post-images/${filename}`, 
+                            () => { console.log( "post image file deleted" )
+                } )
+            
             }
                    
-            Post.destroy({
+            Post.destroy( {
                     where: {
                         userID: req.params['userID'],
                         isPublish: true,
                     }
-                })
-                .then( () => {
-                    res.status(200).send("Posts deleted")
-                    console.log("Posts deleted")
-                })
-                .catch((err) => {res.status(500).send("Deletions failed- error ::> " + err)})
-            })
-        .catch((err)=>{res.status(500).send(err)})
+                } )
+                .then( () => { res.status(200).send( "User's posts with its comments deleted" ) } )
+                .catch( (err) => { res.status(500).send( "Deletions failed- error ::> " + err ) } )
+            } )
+
+        .catch( (err) => { res.status(500).send( err ) } )
         
 }
 

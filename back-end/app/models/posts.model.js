@@ -1,6 +1,8 @@
 
-// posts table model
+//-----     posts table model       -----
+
 module.exports = (sequelize, Sequelize) => {
+
     const Post = sequelize.define("posts", {
         postID: {
             type: Sequelize.INTEGER,
@@ -54,11 +56,17 @@ module.exports = (sequelize, Sequelize) => {
             set: function (likers) {this.setDataValue('likers', JSON.stringify(likers))},
             defaultValue: "[]",
         },
+        numberOfComments: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
         isPublish: {
             type: Sequelize.BOOLEAN,
             defaultValue: true,
             allowNull: false,
         }        
     });
+
     return Post;
+
 };

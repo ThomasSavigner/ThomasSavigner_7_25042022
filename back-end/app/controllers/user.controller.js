@@ -13,7 +13,7 @@ const User = db.Users;
 dotenv.config();
 
 
-//          ****  Functions for CRUD operations on user model
+//-------------  Functions for CRUD operations on user model  ------------------------------------------
 
 exports.userSignup = (req, res) => {
 
@@ -47,30 +47,38 @@ exports.userSignup = (req, res) => {
             };
             
             User.create(user)
+                
                 .then((valid) => {
                     if (!valid) {
                         return res.status(500).send("Technical error, try again")
                     }
-
-                    let data = {
-                        time: Date(),
-                        userId: user.userID,
-                    }
                     
-                    res.status(200)
-                        .send({
-                            status: "User account created",
-                            //  token generation
-                            token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' }),
+                    User.findOne({ where: { email: user.email } })
+                        .then((user) => {
                             
-                            //  sending data stored to the front to custom user interface
-                            user: { 
-                                avatar: user.avatarUrl,
-                                firstName: user.firstName,
-                                lastName: user.lastName,
-                                email: user.email,
+                            let data = {
+                                time: Date(),
+                                userId: user.userID,
                             }
+                            
+                            res.status(200)
+                                .send( {
+                                    status: "User account created",
+                                    //  token generation
+                                    token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' }),
+
+                                    //  sending data stored to the front to custom user interface
+                                    user: {
+                                        userID: user.userID,
+                                        avatar: user.avatarUrl,
+                                        firstName: user.firstName,
+                                        lastName: user.lastName,
+                                        email: user.email,
+                                    }
+                                
+                                } )
                         })
+                    
 
                     saveLoginTimestamp = () => { 
                         user.loggedInAt = Date.now();
@@ -120,6 +128,7 @@ exports.userLogin = (req, res) => {
                             token: jwt.sign(data, process.env.JWT_SECRET_KEY, { expiresIn: '16h' }),
                             //  sending data stored to the front to custom user interface
                             user: { 
+                                userID: user.userID,
                                 avatar: user.avatarUrl,
                                 firstName: user.firstName,
                                 lastName: user.lastName,

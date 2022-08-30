@@ -42,7 +42,7 @@ export default function CardPostAndItsComments(props) {
                  </div>
                  <div className="d-flex px-3">
                    <span className="material-icons mx-1">forum</span>
-                   <span>000</span>
+                   <span>{props.numberOfComments}</span>
                  </div>
              </footer>
          </section>

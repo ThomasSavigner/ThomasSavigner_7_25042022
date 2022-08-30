@@ -1,8 +1,11 @@
-const db = require('./app/models');
+
+const db = require("../models");
 const User = db.Users;
 const Post = db.Posts;
-const faker= require('@faker-js/faker/locale/fr');
+const faker = require('@faker-js/faker/locale/fr');
 const fs = require('fs');
+
+
 
 exports.createFakePosts = () => {
 
@@ -58,7 +61,7 @@ exports.createFakePosts = () => {
                     //************* 
                     const postTopic =  faker.lorem.sentence();
                     //************* 
-                    const postArticle = faker.lorem.paragraphs(5);
+                    const postArticle = faker.lorem.paragraphs(8);
                     //************* 
                     const imagePath = 'http://localhost:4039/uploads/post-images/' + newFileName;
                     //************* 

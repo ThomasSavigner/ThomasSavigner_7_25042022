@@ -1,6 +1,8 @@
 
-// comments table model
+//-----     comments table model        -----
+
 module.exports = (sequelize, Sequelize) => {
+    
     const Comment = sequelize.define("comments", {
         commentID: {
             type: Sequelize.INTEGER,
@@ -26,5 +28,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
         },
     });
+
     return Comment;
+
 };

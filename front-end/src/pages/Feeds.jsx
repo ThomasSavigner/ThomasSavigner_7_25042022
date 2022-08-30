@@ -62,7 +62,7 @@ function Feeds() {
                       imageUrl={post.imageUrl}
                       readings={post.readings}
                       likes={post.likes}
-                      
+                      numberOfComments={post.numberOfComments}
           />
         ))
       }

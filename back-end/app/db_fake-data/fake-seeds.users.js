@@ -1,11 +1,13 @@
+
 const db = require("./app/models");
 const User = db.Users;
-
 const bcrypt = require('bcrypt');
 const faker = require('@faker-js/faker/locale/fr');
 const fs = require('fs');
 const https = require('https');
 
+//  Set up Global configuration access with isolated parameters
+dotenv.config();
  
 
 exports.createFakeUser = () => {
@@ -43,7 +45,7 @@ exports.createFakeUser = () => {
             const firstLetter = firstName.charAt(0);
             const mail = firstLetter.toLowerCase() + lastName.toLowerCase() + '@groupomania.fr';
                 
-            const pwd = `Lm#EaHy4h67gs+@`;
+            const pwd = process.env.USERAPPPASSWORD;
             const hash = bcrypt.hashSync(pwd, 10);
             const fakeUser = {
                     firstName: firstName,
@@ -57,23 +59,16 @@ exports.createFakeUser = () => {
             fakeUserArray.push(fakeUser)
               
     }
+
     console.log(fakeUserArray)
-    
                 
     User.bulkCreate(fakeUserArray)
         .then( (response) => {
             console.log(response);
             console.log("User accountS created");
         })
-                        /*(valid) => {
-                        if (!valid) {
-                            return res.status(500).send("Technical error, try again");
-                        }
-                        
-                    })*/
-            .catch((error) => console.log(error));
+        .catch((error) => console.log(error));
         
-
 }
  
         

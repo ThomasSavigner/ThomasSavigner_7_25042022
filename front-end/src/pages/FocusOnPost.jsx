@@ -14,35 +14,32 @@ const FocusOnPost= () => {
   const [ readingsNbr, setReadingsNbr ] = React.useState(null);
   const [ heartColor, setHeartColor ] = React.useState(false);
 
-  React.useEffect(()=> {
+  const callingPost = React.useCallback( () => {
+   
+    postService.focusOnPostandComments(postID)
+      .then( (response) => {
+          let body = [];
+          body.push(response.data.postComments);
+          setArticleContent(body);
 
-    const getPostAndComments = async function () {
-      try {
-        let response = await postService.focusOnPostandComments(postID);
+          setReadingsNbr(response.data.readingsNbr);
+          setHeartColor(response.data.heartHasColor);
+          
+          let commentsArray = response.data.postComments.pstComments;
+          let comments = [];
+          for (let u = 0; u < commentsArray.length; u++) {
+            comments.push(response.data.postComments.pstComments[u]);
+          }
+          setArticleComments(comments);
+      })
+      .catch( (error) =>  { console.log(error) } )
+ 
+  }, [ postID ])
 
-        let body = [];
-        body.push(response.data.postComments);
-        setArticleContent(body);
 
-        setReadingsNbr(response.data.readingsNbr);
-        setHeartColor(response.data.heartHasColor);
-        
-        let commentsArray = response.data.postComments.pstComments;
-        let comments = [];
-        for (let u = 0; u < commentsArray.length; u++) {
-          comments.push(response.data.postComments.pstComments[u]);
-        }
-        setArticleComments(comments);
-
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    
-    getPostAndComments()
+  React.useEffect(()=> { callingPost() }, [ callingPost ] )
   
-  }, [postID])
-
+  
   return (
     
      <>
@@ -62,6 +59,7 @@ const FocusOnPost= () => {
            readings={readingsNbr}
            likes={post.likes}
            heartColor={heartColor}
+           numberOfComments={post.numberOfComments}
     />
 
     ))

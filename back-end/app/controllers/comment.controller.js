@@ -4,7 +4,10 @@ const db = require("../models");
 const Post = db.Posts;
 const Comment = db.Comments;
 
-//        controllers for CRUD operations on comments table and associates
+
+
+//-----     controllers for CRUD operations on comments table and associates        -----
+
 
 exports.createComment = (req, res) => {
 
@@ -23,10 +26,11 @@ exports.createComment = (req, res) => {
    
     Post.findOne({where: {postID: postID}})
         .then( (post) => {
+            post.numberOfComments = post.numberOfComments++;
             post.postCommentsModifiedAt = Date.now();
             post.save()
                 .then(console.log("Post concerned: updatedAt column updated"))
-                .catch((error) => res.status(500).send( {error : "Problem while reccording post update time, try again" } ))
+                .catch((error) => res.status(500).send( {"Problem while updating post data, try again; here is error message : ": error } ))
         })
 }
 
@@ -140,14 +144,28 @@ exports.deleteComment = (req, res) => {
                         isPublish: true,
                     }
                 })
-                .then( () => {res.status(200).send("Comment deleted")})
+                .then( () => {
+                    
+                    Post.findOne({where: {postID: comment.postID}})
+                        .then( (post) => {
+
+                            post.numberOfComments = post.numberOfComments--;
+                            
+                            post.save()
+                                .then(console.log("Post concerned: updatedAt column updated"))
+                                .catch((error) => res.status(500).send( {"Problem while updating post data, try again; here is error message : ": error } ))
+                        
+                        })
+                
+                    res.status(200).send("Comment deleted")
+                })
                 .catch((err) => {res.send("Deletion failed - error ::>" + err)})
         })
         .catch((err) => {res.status(500).send("Problem :::> " + err)})
 
 }
 
-exports. deleteAllMyComments = (req, res) => {
+exports.deleteAllMyComments = (req, res) => {
 
     const userIDValue = parseInt(req.params['userID'])
 
@@ -155,14 +173,29 @@ exports. deleteAllMyComments = (req, res) => {
         res.status(403).send("Deletion process cancelled: you're not the comments owner !")
     }
 
-    Comment.destroy({
-            where: {
-                userID: req.params['userID'],
-                isPublish: true,
-            }
-        })
-        .then( () => {res.status(200).send("Comments deleted")})
-        .catch((err) => {res.send("Deletions failed - error ::> " + err)})
+    Post.findAll( { 
+                    where: { isPublish: true },
+                    include: [ { association: 'postC', where: { userID: req.params['userID'] } } ], 
+                  }
+        )       
+        .then( (posts) => {
+
+            posts.numberOfComments = posts.numberOfComments--;
+                    
+            posts.save()
+                .then(console.log("Comments removing process : associated posts data updated"))
+                .catch((error) => res.status(500).send( {"Problem while updating associated posts data, try again; here is error message : ": error } ))
+        } )
+        .catch( (err) => { res.send( "Can't find all posts associated with user's comments - Error message : "+err ) } )
+
+    Comment.destroy( {
+                        where: {
+                            userID: req.params['userID'],
+                            isPublish: true,
+                        }
+                } )
+                .then( () => { res.status(200).send( "Comments deleted" ) } )
+                .catch((err) => {res.send("Deletions failed - error ::> " + err)})
 
 }
 

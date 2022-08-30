@@ -1,5 +1,6 @@
 
-// departments of users table model
+//-----     departments of users table model        -----
+
 module.exports= (sequelize, Sequelize) => {
     const Department = sequelize.define("departments", {
         departmentID: {
@@ -13,5 +14,7 @@ module.exports= (sequelize, Sequelize) => {
             allowNull: false,
         },
     });
+
     return Department;
+    
 };

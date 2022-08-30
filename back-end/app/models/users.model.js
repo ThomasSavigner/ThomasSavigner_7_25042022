@@ -1,6 +1,8 @@
 
-// user table model
+//-----     user table model        -----
+
 module.exports = (sequelize, Sequelize) => {
+    
     const User = sequelize.define("users", {
         userID: {
             type: Sequelize.INTEGER,
@@ -50,5 +52,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.DATE,
         },
     });
+
     return User;
+
 };
