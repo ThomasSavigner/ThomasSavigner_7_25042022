@@ -1,8 +1,10 @@
+
 import React from "react";
 import { useParams } from "react-router-dom";
 import postService from "../services/post.service";
-import ArticlePost from "../components/ArticlePost/index"
-import CommentsBox from "../components/CommentsBox"; 
+import PostFocusBox from "../components/PostFocusBox";
+import CommentsBox from "../components/CommentsBox";
+
 
 
 const FocusOnPost= () => {
@@ -11,80 +13,107 @@ const FocusOnPost= () => {
 
   const [ articleContent, setArticleContent ] = React.useState([]);
   const [ articleComments, setArticleComments ] = React.useState([]);
-  const [ readingsNbr, setReadingsNbr ] = React.useState(null);
-  const [ heartColor, setHeartColor ] = React.useState(false);
+  const [ articleUpdatedAt, setArticleUpdatedAt ] = React.useState();
+  const [ heartColor, setHeartColor ] = React.useState()
+  const [ readingsNbr, setReadingsNbr ] = React.useState();
+  const [ likesNbr, setLikesNbr ] = React.useState();
+  const [ numberOfComments,setNumberOfComments ] = React.useState();
+
+
 
   const callingPost = React.useCallback( () => {
    
     postService.focusOnPostandComments(postID)
       .then( (response) => {
-          let body = [];
-          body.push(response.data.postComments);
-          setArticleContent(body);
-
-          setReadingsNbr(response.data.readingsNbr);
-          setHeartColor(response.data.heartHasColor);
           
+          let body = [];
+
+          body.push(response.data.postComments);
+          
+          setArticleContent(body);
+          
+
           let commentsArray = response.data.postComments.pstComments;
+          
           let comments = [];
+          
           for (let u = 0; u < commentsArray.length; u++) {
             comments.push(response.data.postComments.pstComments[u]);
           }
+
+
+          setArticleUpdatedAt(response.data.postComments.postCommentsModifiedAt);
+
           setArticleComments(comments);
+
+          setHeartColor(response.data.heartHasColor);
+
+          setReadingsNbr(response.data.readingsNbr);
+
+          setLikesNbr(response.data.likesNbr);
+
+          setNumberOfComments(response.data.postComments.numberOfComments);
+
       })
       .catch( (error) =>  { console.log(error) } )
  
-  }, [ postID ])
+  }, [ postID ]);
 
 
   React.useEffect(()=> { callingPost() }, [ callingPost ] )
-  
-  
+
+
   return (
-    
-     <>
-    { articleContent.map((post) => (
-    
-    <ArticlePost 
-           key={post.postID}
-           avatarUrl={post.userP.avatarUrl}
-           firstName={post.userP.firstName}
-           lastName={post.userP.lastName}
-           department={post.userP.department.name}
-           postCommentsModifiedAt={post.postCommentsModifiedAt}
-           topic={post.topic}
-           hashtags={post.hashtags}
-           article={post.article}
-           imageUrl={post.imageUrl}
-           readings={readingsNbr}
-           likes={post.likes}
-           heartColor={heartColor}
-           numberOfComments={post.numberOfComments}
-    />
+          
+          <>
 
-    ))
-  }
-  <div className="commentsbox-position">
-  { articleComments.map((comment) => (
-    
-    <CommentsBox
-          key={comment.commentID}
-          userAvatar={comment.userC.avatarUrl}
-          userFirstName={comment.userC.firstName}
-          userLastName={comment.userC.lastName}
-          timestamp={comment.createdAt}
-          content={comment.content}
-    />
-  ))
-    
-  }
-  </div>
+              {
 
-  
+                articleContent.map((post) => (
+            
+                  <PostFocusBox 
+                                  key={post.postID}
+                                  avatarUrl={post.userP.avatarUrl}
+                                  firstName={post.userP.firstName}
+                                  lastName={post.userP.lastName}
+                                  department={post.userP.department.name}
+                                  articleCreatedAt={post.createdAt}
+                                  postCommentsModifiedAt={articleUpdatedAt}
+                                  topic={post.topic}
+                                  hashtags={post.hashtags}
+                                  article={post.article}
+                                  imageUrl={post.imageUrl}
+                                  readingsNbr={readingsNbr}
+                                  setReadingsNbr={setReadingsNbr}
+                                  heartColor={heartColor}
+                                  setHeartColor={setHeartColor}
+                                  likesNbr={likesNbr}
+                                  setLikesNbr={setLikesNbr}
+                                  numberOfComments={articleComments.length}
+                                  setNumberOfComments={setNumberOfComments}
+                  />
 
-   
-    </>
+                ))
+
+              }
+
+              <div className="commentsbox-position">
+
+                <CommentsBox
+                                articleUpdatedAt={articleUpdatedAt}
+                                setArticleUpdatedAt={setArticleUpdatedAt}
+                                numberOfComments={numberOfComments}
+                                setNumberOfComments={setNumberOfComments}
+                                articleComments={articleComments}
+                                setArticleComments={setArticleComments}
+                />
+        
+            </div>
+
+          </>
+
   );
+
 }
 
 export default FocusOnPost;

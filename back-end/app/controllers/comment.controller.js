@@ -12,9 +12,9 @@ const Comment = db.Comments;
 exports.createComment = (req, res) => {
 
     const myComment = {
+        postID: req.body.myComment.postID,
         userID: req.auth.tokenUserId,
-        postID: req.params['postID'],
-        content: req.body.content,
+        content: req.body.myComment.content,
     }
 
     Comment.create(myComment)
@@ -22,15 +22,20 @@ exports.createComment = (req, res) => {
         .catch((error) => { res.status(500).send(error)})
     
 
-    const postID = myComment.postID
-   
-    Post.findOne({where: {postID: postID}})
+    const postID = myComment.postID;
+
+    Post.findOne({where: {postID: postID} })
         .then( (post) => {
-            post.numberOfComments = post.numberOfComments++;
+
+            post.numberOfComments = post.numberOfComments+1;
+
             post.postCommentsModifiedAt = Date.now();
+
             post.save()
                 .then(console.log("Post concerned: updatedAt column updated"))
-                .catch((error) => res.status(500).send( {"Problem while updating post data, try again; here is error message : ": error } ))
+                .catch((error) => res.status(500)
+                                    .send( {"Problem while updating post data, try again; here is error message : ": error } ))
+
         })
 }
 

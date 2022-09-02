@@ -42,7 +42,7 @@ exports.feedsProvider = (req, res) => {
                 where: {
                     isPublish: true,
                 },
-                attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
+                attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 'createdAt',
                                 'postCommentsModifiedAt', 'readings', 'likes', 'numberOfComments',
                             ],
                 include: [{
@@ -57,7 +57,7 @@ exports.feedsProvider = (req, res) => {
                 order: [['postID', 'DESC']]
                 })
                 .then((posts) => {
-                    res.status(200).json({'result': posts/*, 'count': data.count, 'pages': pages*/});
+                    res.status(200).json( { 'result': posts } );
                 });
 }
 
@@ -172,13 +172,15 @@ exports.focusOnPostandComments = (req, res) => {
                 readingsNbr = data.readings;
             }
             
+            let likesNbr = data.likes;
+
             //  does user ever like post ?
             let heartHasColor = false;
             if (data.likers.includes(req.auth.tokenUserId)) {
                 heartHasColor = true;    
             }
 
-            let result = [data, readingsNbr, heartHasColor]
+            let result = [data, readingsNbr, likesNbr, heartHasColor]
 
             return result
         })
@@ -186,9 +188,10 @@ exports.focusOnPostandComments = (req, res) => {
         
             let post = result[0];
             let readings = result[1];
-            let heartHasColor = result[2];
+            let likesNbr = result[2];
+            let heartHasColor = result[3];
 
-            res.status(200).json({'postComments': post, 'readingsNbr': readings, 'heartHasColor': heartHasColor})
+            res.status(200).json({'postComments': post, 'readingsNbr': readings, 'likesNbr': likesNbr, 'heartHasColor': heartHasColor})
         })
         .catch((err) => { res.status(404).send("I don't find it ! Try again...later... Here is the error :  "+err )})
 
@@ -299,27 +302,62 @@ exports.likePost = (req, res) => {
         })
         .then( (post) => {
 
-            if (post.userID === req.auth.tokenUserId) {
+            const likerUserID = req.auth.tokenUserId;
+            let likesNbr = post.likes;
+
+            if ( post.userID === likerUserID ) {
                 res.status(403).send("Unauthorized request: You can't like your post")                
             }
 
-            //  Did user ever like post ?
-            let likersArray = post.likers
-            const everLiked = likersArray.includes(req.auth.tokenUserId)
-            if (!everLiked) {    //  increment post.likers, save liker
-                let likesNbr = post.likes+1
-                likersArray.push(req.auth.tokenUserId);
+            //--------  Did user ever like post ?
+            let likersArray = post.likers;
+
+            const everLiked = likersArray.includes(likerUserID);
+            
+            if ( !everLiked ) { 
+                //----  User's never liked post, he add his like on likes counter and become a liker
+                let newLikesNbr = likesNbr+1;
+                likersArray.push(likerUserID);
+                
                 post.set({
-                    likes: likesNbr,
+                    likes: newLikesNbr,
                     likers: likersArray,
                 })
+
                 post.save()
                     .then(
-                        res.status(200).send("Like saved")  
+                        res.status(200).send( 
+                            {
+                                status: "Like saved", 
+                                likesNbr: newLikesNbr 
+                            } 
+                        ) 
                     )   
-                    .catch((error) => res.status(500).send( {error : "Problem while saving like, try again" } ))
-            } else {
-                res.status(403).send("You ever liked post")
+                    .catch((error) => res.status(500).send( "Problem while saving like, try again - error : " + error ))
+            } else {    
+                
+                //----  User's ever like post, he wants to cancel it 
+                let newLikesNbr = likesNbr-1;
+                const likerIndex = likersArray.indexOf( likerUserID, undefined);
+
+                likersArray.splice( likerIndex, 1)
+
+                post.set({
+                    likes: newLikesNbr,
+                    likers: likersArray,
+                })
+
+                post.save()
+                .then(
+                    res.status(200).send( 
+                        {
+                            status: "Like cancelled", 
+                            likesNbr: newLikesNbr 
+                        } 
+                    ) 
+                )    
+                    .catch((error) => res.status(500).send( "Problem while cancelling like, try again - error : " + error ))
+            
             }
         })
         .catch((err) => { res.status(500).send("Problem : " + err)})
