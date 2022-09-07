@@ -31,6 +31,10 @@ module.exports = (sequelize, Sequelize) => {
         imageUrl: {
             type: Sequelize.STRING
         },
+        isRelease: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+        },
         postCommentsModifiedAt: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -63,7 +67,6 @@ module.exports = (sequelize, Sequelize) => {
         isPublish: {
             type: Sequelize.BOOLEAN,
             defaultValue: true,
-            allowNull: false,
         }        
     });
 

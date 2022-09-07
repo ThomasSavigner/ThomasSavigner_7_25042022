@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import postService from "../services/post.service";
 import PostFocusBox from "../components/PostFocusBox";
 import CommentsBox from "../components/CommentsBox";
+import { HashLink as Link} from "react-router-hash-link";
 
 
 
@@ -18,7 +19,7 @@ const FocusOnPost= () => {
   const [ readingsNbr, setReadingsNbr ] = React.useState();
   const [ likesNbr, setLikesNbr ] = React.useState();
   const [ numberOfComments,setNumberOfComments ] = React.useState();
-
+  
 
 
   const callingPost = React.useCallback( () => {
@@ -66,6 +67,10 @@ const FocusOnPost= () => {
   return (
           
           <>
+
+              <Link to={`/app/upstreamflow#${postID}`} >
+                <span className="material-icons">first_page</span>
+              </Link>
 
               {
 

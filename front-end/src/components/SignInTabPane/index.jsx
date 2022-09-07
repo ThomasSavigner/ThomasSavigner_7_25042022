@@ -31,7 +31,7 @@ function SignInTabPane() {
         AuthService.login(values.email, values.password)
             .then( () => {
                
-                const origin = location.state?.from?.pathname || 'app/feeds';
+                const origin = location.state?.from?.pathname || 'app/upstreamflow';
                 navigate(origin, {replace: true});
             },
             (error) => {

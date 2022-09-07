@@ -12,6 +12,7 @@ const CommentsBox = ( props ) => {
                             
                             <CommentsItem 
                                             key={comment.commentID}
+                                            tagId={comment.commentID}
                                             userAvatar={comment.userC.avatarUrl}
                                             userFirstName={comment.userC.firstName}
                                             userLastName={comment.userC.lastName}

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from "react-router-dom";
 import Login from './pages/Login';
-import Feeds from './pages/Feeds';
-import CreatePost from './pages/CreatePost';
+import PostUpStreamFlow from './pages/PostUpStreamFlow';
+import EditPost from './pages/EditPost';
 import FocusOnPost from './pages/FocusOnPost';
 import Profile from './pages/Profile';
 import MyPublications from './pages/MyPublications';
@@ -22,8 +22,8 @@ function App() {
                     <Route index element={<Login />} />
                 </Route>
                 <Route path="/app" element={<ProtectedLayout />} >
-                    <Route path="feeds" element={<Feeds />} />
-                    <Route path="postit" element={<CreatePost />} />
+                    <Route path="upstreamflow" element={<PostUpStreamFlow />} />
+                    <Route path="editpost" element={<EditPost />} />
                     <Route path=":postID" element={<FocusOnPost />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="mypublications" element={<MyPublications />} />
@@ -34,4 +34,4 @@ function App() {
     )
 }
 
-export default App
+export default App;

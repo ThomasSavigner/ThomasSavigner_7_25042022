@@ -4,6 +4,8 @@ import { Container } from 'react-bootstrap';
 
 import Navbar from "../Navbar/index"
 import UserMenu from "../UserMenu/index"
+import FirstFooter from "../FirstFooter"
+
 
 const ProtectedLayout = () => {
     const outlet = useOutlet();
@@ -15,11 +17,14 @@ const ProtectedLayout = () => {
     return (
     <div>
         
-        <Container className="nav-display position-sticky header-position rounded color-3 d-flex align-items-start border border-light border-2 p-3" fluid> 
-          <img src="/logos-brand/icon-left-font-monochrome-white.png" className="logo-brand" alt="logo"/>
-          <h1 className="fs-4 text-light mx-2">GroupoSpeak</h1>
+        <Container className="nav-display position-sticky header-position rounded color-3 d-flex align-items-start border border-light border-2" fluid> 
+          <div className='header-content-position'>
+            <img src="/logos-brand/white-logo.png" className="logo-header" alt="logo"/>
+            <h1 className="fs-4 text-light mx-2">GroupoSpeak</h1>
+            <Navbar />
+          </div>
         </Container>
-        <Container fluid>
+        <Container fluid >
             <div className="d-none d-md-block col-md-1 bg-dark p-0 position-md-fixed vh-100 container-md-position left-column-md-position">
                 <img src="../../images/the-blowup-17qno4cS6l0-unsplash.jpg" alt="façade de building vitré" 
                     className="img-fit w-100 h-100"/>
@@ -32,11 +37,12 @@ const ProtectedLayout = () => {
                 <img src="../../images/the-blowup-17qno4cS6l0-unsplash.jpg" alt="façade de building vitré" 
                     className="img-fit w-100 h-100"/>
             </div>
+            <FirstFooter className="d-none d-md-block"/>
         </Container>
         
             {outlet}
         <UserMenu />
-        <Navbar />
+        
                 
     </div>
     );

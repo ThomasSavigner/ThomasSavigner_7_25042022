@@ -1,9 +1,8 @@
 
 import axios from 'axios';
-import authHeader from './auth-header';
+import authHeaders from './auth-headers';
 
 const API_URL = "http://localhost:4039/api/comments/";
-const requestHeaders = { headers: authHeader()};
 
 
 
@@ -14,7 +13,7 @@ const requestHeaders = { headers: authHeader()};
 
 const createComment = ( myComment ) => {
 
-    return axios.post( API_URL + "postID", { myComment }, requestHeaders )
+    return axios.post( `${API_URL}postID`, { myComment }, authHeaders.jwtToken() )
 
 }
 

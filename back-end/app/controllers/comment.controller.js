@@ -99,6 +99,7 @@ exports.updateComment = (req, res) => {
                             where: {
                                 postID: comment.postID,
                                 isPublish: true,
+                                isRelease: true,
                             }
                         })
                         .then((post) => {
@@ -114,6 +115,7 @@ exports.updateComment = (req, res) => {
                             Post.update(newData, {
                                     where: {
                                         postID: comment.postID,
+                                        isRelease: true,
                                         isPublish: true,
                                     }
                                 })
@@ -151,7 +153,7 @@ exports.deleteComment = (req, res) => {
                 })
                 .then( () => {
                     
-                    Post.findOne({where: {postID: comment.postID}})
+                    Post.findOne({where: {postID: comment.postID, isRelease: true}})
                         .then( (post) => {
 
                             post.numberOfComments = post.numberOfComments--;

@@ -1,15 +1,20 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom'
 import { toFormatedDate } from '../../utils/formatDateFromDB';
 import PostCountersBox from '../PostCountersBox/index';
 
 
-export default function Cardpost(props) {
+const PostItem= (props) => {
 
   const [ readingsNbr ] = React.useState(props.readingsNbr);
   const [ likesNbr ] = React.useState(props.likesNbr);
   const [ numberOfComments ] = React.useState(props.numberOfComments);
-  
+  const [ imageUrl, setImageUrl ] = React.useState(props.imageUrl);
+
+  if (imageUrl === '') {
+    setImageUrl('/images/outline_insert_photo_black_48dp.png')
+  }
+
   // Format timestamp to date-time
   let dateArticleCreatedAt = toFormatedDate(props.articleCreatedAt)
 	let datePostUpdatedAt = toFormatedDate(props.postUpdatedAt)
@@ -17,9 +22,9 @@ export default function Cardpost(props) {
   return (
             <>
             
-              <section className="card-position border border-dark mx-auto mt-1 color-4  text-decoration-none">
+              <section id={props.tagId} className="card-position border border-dark mx-auto mt-1 color-4  text-decoration-none">
                
-                <Link to={"/app/" + props.postID} style={{textDecoration: 'none'}}>
+                  <Link to={"/app/" + props.postID} style={{textDecoration: 'none'}}>
                 
                     <header className="d-flex p-1 color-2 card-header">
                         
@@ -44,7 +49,7 @@ export default function Cardpost(props) {
                               <p className="text-article font-text fs-6">{props.article}</p>
                             </div>  
                             <div className="color-4 my-1 mx-auto imgcontainer-position text-center">
-                              <img src={props.imageUrl} alt="article's illustration" className="img-fluid border-dark imgphoto-position p-0" />
+                              <img src={imageUrl} alt="article's illustration" className="img-fluid border-dark imgphoto-position p-0" />
                             </div>
                           </div>
                         </div>
@@ -63,9 +68,9 @@ export default function Cardpost(props) {
 
                         </div>
 
-                    </footer>
+                      </footer>
                     
-                  </Link>
+                    </Link>
 
                 </section>
                 
@@ -74,3 +79,4 @@ export default function Cardpost(props) {
     )
 
 }
+export default PostItem;

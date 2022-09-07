@@ -53,7 +53,12 @@ exports.userSignup = (req, res) => {
                         return res.status(500).send("Technical error, try again")
                     }
                     
-                    User.findOne({ where: { email: user.email } })
+                    User.findOne( { 
+                                    where: { email: user.email },
+                                    include: [{
+                                        association: 'department',
+                                        attributes: ['name'],
+                                    }], })
                         .then((user) => {
                             
                             let data = {
@@ -74,6 +79,7 @@ exports.userSignup = (req, res) => {
                                         firstName: user.firstName,
                                         lastName: user.lastName,
                                         email: user.email,
+                                        department: user.department.name,
                                     }
                                 
                                 } )
@@ -97,7 +103,15 @@ exports.userSignup = (req, res) => {
 
 exports.userLogin = (req, res) => {
 
-        User.findOne( {where: { email: req.body.email } } )
+        User.findOne( { 
+                
+                where: { email: req.body.email },
+                include: [{
+                    association: 'department',
+                    attributes: ['name'],
+                }],  
+            
+            } )
             .then( (user) => {
                 
                 if (!user) {
@@ -133,6 +147,7 @@ exports.userLogin = (req, res) => {
                                 firstName: user.firstName,
                                 lastName: user.lastName,
                                 email: user.email,
+                                department: user.department.name,
                             }
                         } );
 

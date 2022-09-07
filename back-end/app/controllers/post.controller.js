@@ -28,6 +28,7 @@ exports.createPost = (req, res) => {
         topic: req.body.topic,
         article: req.body.article,
         imageUrl: imagePath,
+        isRelease: req.body.isRelease,
     }
 
     Post.create(myPost)
@@ -40,9 +41,10 @@ exports.feedsProvider = (req, res) => {
          
             Post.findAll({
                 where: {
+                    isRelease: true,
                     isPublish: true,
                 },
-                attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 'createdAt',
+                attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 'isRelease', 'createdAt',
                                 'postCommentsModifiedAt', 'readings', 'likes', 'numberOfComments',
                             ],
                 include: [{
@@ -76,6 +78,7 @@ exports.feedsAtLogin = (req, res) => {
             
             Post.findAndCountAll({
                     where: {
+                        isRelease: true,
                         isPublish: true,
                         postCommentsModifiedAt: {
                             [Op.gte]: lastLogoutDate,
@@ -89,12 +92,13 @@ exports.feedsAtLogin = (req, res) => {
                     
                     Post.findAll({
                         where: {
+                            isRelease: true,
                             isPublish: true,
                             postCommentsModifiedAt: {
                                 [Op.gte]: lastLogoutDate,
                             }
                         },
-                        attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
+                        attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 'isRelease',
                                         'createdAt','postCommentsModifiedAt', 'readings', 'likes',
                                     ],
                         include: [{
@@ -125,8 +129,9 @@ exports.focusOnPostandComments = (req, res) => {
     Post.findOne({
             where: {
                 postId: req.params['postID'],
+                isRelease: true,
             },
-            attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
+            attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 'isRelease',
                             'createdAt', 'postCommentsModifiedAt', 'readings', 'readers',
                             'likes', 'likers', 'numberOfComments',
             ],
@@ -199,49 +204,34 @@ exports.focusOnPostandComments = (req, res) => {
 
 exports.getAllMyPosts = (req, res) => {
 
-    let limit = 1;
-    let offset = 0;
-    
-    Post.findAndCountAll({
+Post.findAll(
+    {
+        where: {
+            isPublish: true,
+            userID: req.params['userID'],
+        },
+        attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 'isRelease',
+                        'postCommentsModifiedAt', 'readings', 'likes',
+                    ],
+        include: [{
+            association: 'pstComments',
+            required: false,
             where: {
-                isPublish: true,
-                userID: req.params['userID'],
-            }
-         })
-        .then((data) => {
-            let page = req.params['page'];
-            let pages = Math.ceil(data.count / limit);
-            
-            offset = limit * (page - 1);
-            
-            Post.findAll({
-                where: {
-                    isPublish: true,
-                    userID: req.params['userID'],
-                },
-                attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 
-                                'postCommentsModifiedAt', 'readings', 'likes',
-                            ],
-                include: [{
-                    association: 'pstComments',
-                    where: {
-                        isPublish: true
-                    },
-                    attributes: ['content'],
-                    include: [{
-                        association: 'userC',
-                        attributes: ['firstName', 'lastName', 'avatarUrl'],
-                    }]
-                }],
-                limit: limit,
-                offset: offset,
-                order: [['postCommentsModifiedAt', 'DESC']]
-            })
-                .then((posts) => {          //  ******* add next page: bool
-                    res.status(200).json({'results': posts, 'count': data.count, 'pages': pages});
-                });
-        })
-        .catch((error) => {res.status(500).send('Internal Server Error ::> '+error)})
+                isPublish: true
+            },
+            attributes: ['content'],
+            include: [{
+                association: 'userC',
+                attributes: ['firstName', 'lastName', 'avatarUrl'],
+            }]
+        }],
+        order: [['postCommentsModifiedAt', 'DESC']]
+    }
+    )
+    .then((posts) => {          //  ******* add next page: bool
+        res.status(200).json( {'results': posts} );
+    })
+    .catch((error) => {res.status(500).send('Internal Server Error ::> '+error)})
 
 }
 
@@ -297,6 +287,7 @@ exports.likePost = (req, res) => {
     Post.findOne({
         where: {
             postID: req.params['postID'],
+            isRelease:true,
             isPublish: true,
         },
         })
@@ -442,7 +433,7 @@ exports.getTopPosts = (req, res) => {
     const ranks = parseInt(req.params['limit']);
 
     Post.findAll({
-            where: {isPublish: true},
+            where: {isPublish: true, isRelease: true},
             order: [['likes', 'DESC']],
             include: [{
                 association: 'userP',
@@ -487,7 +478,7 @@ exports.getTheNLastPosts = (req, res) => {
     const ranks = parseInt(req.params['limit']);
 
     Post.findAll({
-        where: {isPublish: true},
+        where: {isPublish: true, isRelease: true},
         order: [['postCommentsModifiedAt', 'DESC']],
         include: [{
             association: 'userP',

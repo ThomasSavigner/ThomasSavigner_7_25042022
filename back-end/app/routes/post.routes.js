@@ -11,7 +11,7 @@ router.get("/top/:limit", authentication, postCtrl.getTopPosts);
 router.get("/last/:limit", authentication, postCtrl.getTheNLastPosts);
 router.get("/login/:page", authentication, postCtrl.feedsAtLogin);      //route'll be used in production mode 
 router.get("/post/:postID", authentication, postCtrl.focusOnPostandComments);
-router.get("/:userID/:page", authentication, postCtrl.getAllMyPosts);
+router.get("/:userID", authentication, postCtrl.getAllMyPosts);
 router.put("/:postID", authentication, multer, postCtrl.updatePost);
 router.put("/like/:postID", authentication, postCtrl.likePost);
 

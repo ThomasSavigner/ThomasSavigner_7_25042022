@@ -15,7 +15,7 @@ function SignUpTabPane() {
     const [avatarPreview, setAvatarPreview] = React.useState('icons/default-avatar.png');
   
     const handleFileOnChange = (event) => {
-        console.log(avatarPreview)
+        
         const file = event.target.files[0];
         let reader = new FileReader();
         reader.readAsDataURL(file);
@@ -54,7 +54,7 @@ function SignUpTabPane() {
         onSubmit: (values) => {
             AuthService.signup(values.fileimg, values.lastname, values.firstname, values.department, values.email, values.password, values.passwordConfirm) 
                 .then( () => {
-                    const origin = location.state?.from?.pathname || 'app/feeds';
+                    const origin = location.state?.from?.pathname || 'app/upstreamflow';
                     navigate(origin, {replace: true});
                 })
                 .catch((err) => { console.log(err); })

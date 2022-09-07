@@ -6,12 +6,14 @@ function NotFound() {
 
   return (
 
-    <div>
-      <nav>
-        <Link to="/app/feeds">Page not found</Link>
-      </nav>
-    </div>
-  );
+            <div>
+              <nav>
+                <Link to="/app/upstreamflow">Page not found</Link>
+              </nav>
+            </div>
+
+
+         );
 }
 
 export default NotFound;

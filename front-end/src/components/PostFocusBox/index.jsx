@@ -6,6 +6,12 @@ import '../../styles/PostFocusBox.css'
 
 export default function PostFocusBox(props) {
 
+  const [ imageUrl, setImageUrl ] = React.useState(props.imageUrl);
+
+  if (imageUrl === '') {
+    setImageUrl('/images/outline_insert_photo_black_48dp.png')
+  }
+
   // Format article date
   const datePostCreatedAt = toFormatedDate(props.articleCreatedAt);
   let datePostUpdated = toFormatedDate(props.postCommentsModifiedAt);
@@ -38,7 +44,7 @@ export default function PostFocusBox(props) {
                   
                   <div className="text-center">
                     
-                    <img src={props.imageUrl} alt="article's illustration" className="shadow art-imgcontainer-position border-dark imgarticle-size p-0" />
+                    <img src={imageUrl} alt="article's illustration" className="shadow art-imgcontainer-position border-dark imgarticle-size p-0" />
                   
                   </div>
 

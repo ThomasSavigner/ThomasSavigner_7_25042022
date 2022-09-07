@@ -43,6 +43,13 @@ main colors->
   top: 0;
   z-index:1;
 }
+.header-content-position {
+  display: flex;
+  align-items:center
+}
+.logo-header {
+  width: 3em;
+}
 .logo-brand {
   width: 150px;
 }
@@ -94,6 +101,11 @@ h1 {
   width: 7.5em;
   background-color: #f2f1e7;
 }
+.article-picture-container {
+  height: auto;
+  width: 12em;
+  background-color: #f2f1e7;
+}
 
 /* upload file button */
 .thumbnail {
@@ -131,15 +143,29 @@ h1 {
   top: 11%;
   left: 5%;
 }
+.post-hashtags-area {
+  height: 3em;
+}
+.post-topic-area {
+  height: 3em;
+}
+.post-article-area {
+  height: 10em;
+}
+.article-size {
+  height: 65em;
+}
 .lockbrand-position {
   height: 2.7em;
   position: fixed;
   bottom: 0;
 }
 .navbar-position {
-  position:fixed;
-  left: 12.5%;
-  bottom:1.5em;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 .linktoppage-margin {
   margin-bottom: 4em;
@@ -159,11 +185,6 @@ h1 {
     left: 20%;  
   }
 
-  .navbar-position {
-    position: fixed;
-    left: 25%;
-    bottom: 0;
-  }
   .lockbrand-position {
     width: 50%;
     position: fixed;
@@ -179,12 +200,12 @@ h1 {
   }
     
   .container-md-position {
-    top: 4em;
+    top: 2em;
     z-index: -1;
   }
 
   .container-center-md-position {
-    top: 4em;
+    top: 2em;
   }
 
   .left-column-md-position {
@@ -203,7 +224,6 @@ h1 {
 		position: fixed !important;
 	}
 
-
   .lockbrand-position {
     width: 30%;
     position: fixed;
@@ -218,10 +238,9 @@ h1 {
   }
 
   .navbar-position {
-    position: fixed;
-    left: 19.25%;
-    bottom: 1.5em;
-    
+    position: static;
+    width: 30em;
+    margin-left: 2%;
   }
 }
 
@@ -238,9 +257,6 @@ h1 {
     position: fixed;
     left: 20em;
   }
-  .navbar-position {
-    left: 27%;
-  }
 }
 
 @media (min-width: 1200px) {
@@ -255,9 +271,6 @@ h1 {
     position: fixed;
     left: 30em;
   }
-  .navbar-position {
-    left: 32%;
-  }
 }
 
 @media (min-width: 1400px) {
@@ -271,8 +284,5 @@ h1 {
     width: 50em;
     position: fixed;
     left: 30em;
-  }
-  .navbar-position {
-    left: 35%;
   }
 }

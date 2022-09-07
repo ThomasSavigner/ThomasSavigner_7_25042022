@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import authHeader from "./auth-header";
+import authHeaders from "./auth-headers";
 
 const API_URL = "http://localhost:4039/api/auth/";
 
@@ -22,6 +22,7 @@ const signup = async (
     ) => {
       
       try {
+        
         const response = await axios.post(API_URL + "signup", {
               file,
               lastName,
@@ -29,14 +30,13 @@ const signup = async (
               departmentID,
               email,
               password,
-              passwordConfirm
-          }, {
+              passwordConfirm,
+          }, 
           
-            headers: { "Content-Type": "multipart/form-data" }
-    
-          }
-
-        );
+          authHeaders.formContent()
+        
+        )
+      
 
         if (response.data.token) {
      
@@ -96,7 +96,7 @@ const logout = async () => {
 
   try {
 
-      await axios.put(API_URL + "logout", null, { headers: authHeader() });
+      await axios.put(API_URL + "logout", null, authHeaders.jwtToken() );
       localStorage.clear();
 
   } catch (error) {

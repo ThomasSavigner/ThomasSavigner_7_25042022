@@ -104,7 +104,8 @@ const CommentsFormAddComment = (
                                 >
                                 </textarea>
                                 { formik.errors.usercomment && formik.touched.usercomment && (
-                            <p className="text-danger font-aside my-1">{formik.errors.usercomment}</p> )} 
+                                    <p className="text-danger font-aside my-1">{formik.errors.usercomment}</p> 
+                                )} 
                                 <input 
                                     id="submitbutton"
                                     name="submitbutton" 
