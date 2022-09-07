@@ -12,6 +12,7 @@ import ProtectedLayout from './components/ProtectedLayout/index';
 
 import './styles/style.css';
 import './styles/cardpost-style.css'
+import './styles/MyPublications.css'
 
 function App() {
 

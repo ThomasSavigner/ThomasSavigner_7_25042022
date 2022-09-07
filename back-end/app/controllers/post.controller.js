@@ -211,7 +211,7 @@ Post.findAll(
             userID: req.params['userID'],
         },
         attributes: ['postID', 'hashtags', 'topic', 'article', 'imageUrl', 'isRelease',
-                        'postCommentsModifiedAt', 'readings', 'likes',
+                        'postCommentsModifiedAt', 'readings', 'likes', 'numberOfComments', 'isPublish'
                     ],
         include: [{
             association: 'pstComments',

@@ -26,20 +26,20 @@ const MyPublicationsTableItemActionsBtns = (props) => {
 
         <>
         
-            <div>
-                <div>
+            <div className="d-flex my-2 py-1">
+                <div className="mx-1 px-1 bg-secondary">
                     <Link to={`/app/${props.postID}`}>
-                        <span className="material-icons">visibility</span>
+                        <span className="material-icons text-light py-1">visibility</span>
                     </Link>
                 </div>
-                <div>
+                <div className="mx-1 px-1 bg-secondary">
                     <Link to="/app/editpost" onClick={accessToEditPostForm} >
-                        <span className="material-icons">update</span>
+                        <span className="material-icons text-light py-1">update</span>
                     </Link>
                 </div>
-                <div>
+                <div className="mx-1 px-1 bg-secondary">
                     <div>
-                        <span className="material-icons">delete</span>
+                        <span className="material-icons text-light py-1">delete</span>
                    </div>
                 </div>
             </div>
