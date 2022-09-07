@@ -49,26 +49,6 @@ const PostAPost = () => {
     const [ postArticle, setPostArticle ] = React.useState('');
 
 
-  //---  Loading post data if existing   ---
-  
-  React.useEffect( () => { 
-    if ( postStatus ) { 
-    
-      postService.focusOnPostandComments(postIDToModify)
-        .then( ( response ) => {
-        
-          
-          setPostHashtags(response.data.postComments.hashtags);
-          setPostTopic(response.data.postComments.topic);
-          setPostArticle(response.data.postComments.article);
-          setPostPreviewPhoto(response.data.postComments.imageUrl);
-
-        }
-        )
-        .catch( (error) => alert(error))
-      
-  } 
-  }, [ postIDToModify, postStatus] )
     
 
     
@@ -194,51 +174,11 @@ const PostAPost = () => {
   
 
 
-  const createSubmitPost = () => {
-
-    const file = formik.values.file;
-    const userID = postUserID;
-    const hashtags = formik.values.hashtags;
-    const topic = formik.values.topic;
-    const article = formik.values.article;
-    const isRelease = true; 
+  //const createSubmitPost = (
 
 
-    postService.createPost( file, userID, hashtags, topic, article, isRelease  )
-      .then( (data) => {
-        
-        console.log(data)
-        
-        alert( "Article publié")
-          
-        navigate('/app/upstreamflow', { replace: true });
-
-      })
-      .catch( (error) => { alert( "erreur lors de la publication de votre post: " + error)} )
-  } 
-
-
-  const updateSubmitPost = () => {
-
-      const file = formik.values.file;
-      const userID = postUserID;
-      const hashtags = formik.values.hashtags;
-      const topic = formik.values.topic;
-      const article = formik.values.article;
-      const isRelease = true; 
-  
-      postService.updatePost( postIDToModify, { file, userID, hashtags, topic, article, isRelease }  )
-        .then( (data) => {
-          
-          console.log(data)
-          
-          alert( "Article publié")
-            
-          navigate('/app/upstreamflow', { replace: true });
-  
-        })
-        .catch( (error) => { alert( "erreur lors de la publication de votre post: " + error)} )
-  }
+  //const updateSubmitPost = 
+  //}
 
 
   const formik = useFormik(
@@ -271,13 +211,77 @@ const PostAPost = () => {
 
       //---  Release post in PostUpStreamFlow & send post form values in database by creating 
       //     database post instance if doesn't exist or modify an existing post instance  
-      onSubmit: postStatus ? updateSubmitPost() : createSubmitPost(),
+      onSubmit: postStatus ? () => {
+
+        const file = formik.values.file;
+        const userID = postUserID;
+        const hashtags = formik.values.hashtags;
+        const topic = formik.values.topic;
+        const article = formik.values.article;
+        const isRelease = true; 
+    
+        postService.updatePost( postIDToModify, { file, userID, hashtags, topic, article, isRelease }  )
+          .then( (data) => {
+            
+            console.log(data)
+            
+            alert( "Article publié")
+              
+            navigate('/app/upstreamflow', { replace: true });
+    
+          })
+          .catch( (error) => { alert( "erreur lors de la publication de votre post: " + error)} ) 
+        }
+          : 
+          
+          () => {
+
+            const file = formik.values.file;
+            const userID = postUserID;
+            const hashtags = formik.values.hashtags;
+            const topic = formik.values.topic;
+            const article = formik.values.article;
+            const isRelease = true; 
+        
+        
+            postService.createPost( file, userID, hashtags, topic, article, isRelease  )
+              .then( (data) => {
+                
+                console.log(data)
+                
+                alert( "Article publié")
+                  
+                navigate('/app/upstreamflow', { replace: true });
+        
+              })
+              .catch( (error) => { alert( "erreur lors de la publication de votre post: " + error)} )
+          } ,
       
     }
 
   )
 
   
+  //---  Loading post data if existing   ---
+  
+  React.useEffect( () => { 
+    if ( postStatus ) { 
+    
+      postService.focusOnPostandComments(postIDToModify)
+        .then( ( response ) => {
+        
+          
+          setPostHashtags(response.data.postComments.hashtags);
+          setPostTopic(response.data.postComments.topic);
+          setPostArticle(response.data.postComments.article);
+          setPostPreviewPhoto(response.data.postComments.imageUrl);
+
+        }
+        )
+        .catch( (error) => alert(error))
+      
+  } 
+  }, [ postIDToModify, postStatus] )
 
   return (
             <>
@@ -321,7 +325,7 @@ const PostAPost = () => {
                                     name="file" 
                                     type="file" 
                                     onChange={handleFileOnChange}
-                                    className="w-100 rounded mx-3"
+                                    className="w-100 rounded mx-3 font-aside"
                               />
                             <p className="text-light font-title text-center my-2">*fichiers acceptés: jpg, jpeg et png</p>  
                           </div>
@@ -337,7 +341,7 @@ const PostAPost = () => {
                                   placeholder="#Hashtags, #Hashtags..."
                                   onChange={handleChangeHastags}
                                   value={formik.values.hashtags}
-                                  className="form-control my-1 border border-dark post-hashtags-area"
+                                  className="form-control my-1 border border-dark post-hashtags-area font-title"
                         />
                     
                         { formik.errors.hashtags && formik.touched.hashtags && (
@@ -353,7 +357,7 @@ const PostAPost = () => {
                                   placeholder="Titre / Sujet du post"
                                   onChange={handleChangeTopic}
                                   value={formik.values.topic}
-                                  className="form-control my-1 border border-dark post-topic-area"
+                                  className="form-control my-1 border border-dark post-topic-area font-text"
                         />
                     
                         { formik.errors.topic && formik.touched.topic && (
@@ -369,7 +373,7 @@ const PostAPost = () => {
                                   placeholder="Votre article...🧐"
                                   onChange={handleChangeArticle}
                                   value={formik.values.article}
-                                  className="form-control my-1 border border-dark post-article-area"
+                                  className="form-control my-1 border border-dark post-article-area font-text"
                         />
                        
                         { formik.errors.article && formik.touched.article && (
@@ -377,37 +381,38 @@ const PostAPost = () => {
                           )}
                     
                       </div>
-                      <input 
-                                    id="savebutton"
-                                    name="savebutton" 
-                                    type="button" 
-                                    value="Enregisrer mon brouillon"
-                                    onClick={handleSave}
-                                    className="bg-secondary text-light border border-dark"
-                      />
-                      <div className="form-group">          
-                        <input 
-                                      id="submitbutton"
-                                      name="submitbutton" 
-                                      type="submit"
-                                      
-                                      value="Partager avec mes collègues"
-                                      className="bg-secondary text-light border border-dark"
-                        />
-                      </div>
-
-                   </fieldset>
-                  </form>
-                  <div className="d-flex justify-content-center">
-                    <nav className="bg-secondary  my-2 px-2 py-1">
-                      <Link 
-                            to="/app/upstreamflow" 
-                            className="text-light font-aside text-decoration-none"
-                      >
-                        Annuler mon Post
-                      </Link>
-                   </nav>
-                 </div>
+                        <div  className='p-2'>
+                          <input 
+                                        id="savebutton"
+                                        name="savebutton" 
+                                        type="button" 
+                                        value="Enregisrer mon brouillon"
+                                        onClick={handleSave}
+                                        className="bg-secondary text-light border border-dark my-2 font-aside"
+                          />
+                          <div className="form-group">          
+                            <input 
+                                          id="submitbutton"
+                                          name="submitbutton" 
+                                          type="submit"
+                                          
+                                          value="Partager avec mes collègues"
+                                          className="bg-secondary text-light border border-dark my-2 font-aside "
+                            />
+                          </div>
+                        </div>
+                    </fieldset>
+                    </form>
+                    <div className="d-flex justify-content-center">
+                      <nav className="bg-secondary  my-2 px-2 py-1">
+                        <Link 
+                              to="/app/upstreamflow" 
+                              className="text-light font-aside text-decoration-none"
+                        >
+                          Annuler mon Post
+                        </Link>
+                    </nav>
+                  </div>
                 </main>
 
 

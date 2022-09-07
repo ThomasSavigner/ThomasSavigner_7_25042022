@@ -1,16 +1,15 @@
 
-//import React from 'react';
+import React from 'react';
 
 
 
 const PostsTableItem = (props) => {
    
-  /*  
-    //const [ imageUrl, setImageUrl ] = React.useState('/icons/insert_photo.png')
-
-  
-    //setImageUrl(props.imageUrl)
-  
+    const [ imageUrl, setImageUrl ] = React.useState(props.imageUrl)
+    
+    if (imageUrl === '') {
+        setImageUrl('/icons/insert_photo.png')
+      }
 
     return (
 
@@ -21,7 +20,7 @@ const PostsTableItem = (props) => {
                     
             <tr className="">
                     <th scope="row">
-                        <img src={props.imageUrl} alt="article illustration" className='img-thumbnail'/>
+                        <img src={imageUrl} alt="article illustration" className='img-thumbnail'/>
                     </th>
                     <td>
                         {props.title}
@@ -44,7 +43,7 @@ const PostsTableItem = (props) => {
 
     )
 
-*/
+
 
 }
 
