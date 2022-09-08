@@ -30,7 +30,7 @@ import postService from '../../services/post.service'
 
         <>
 
-            <button type="button" onClick={apiCallToLike} className="text-light px-3 py-1 border border-light rounded bg-secondary m-1">
+            <button type="button" onClick={apiCallToLike} className="text-light px-3 py-1 border border-light rounded color-3 m-1">
                 {
                     heartColor ?  (
                         <span className="material-icons text-danger pt-1">favorite</span>

@@ -296,7 +296,7 @@ const PostAPost = () => {
                         className="rounded-circle avatar-art-width" 
                   />
                   
-                  <div className="mx-2 text-light d-flex flex-wrap w-100">
+                  <div className="mx-2 text-dark d-flex flex-wrap w-100">
                     <h2 className="my-0 font-title fs-5 w-100">{firstName} {lastName}</h2>
                     <p className="my-0 font-text fs-6 w-50">{department}</p>
                   </div>
@@ -318,7 +318,7 @@ const PostAPost = () => {
                               src={postPreviewPhoto} /> 
                         </div>
                         <div className="input-group-btn mx-1 pt-1 pb-2 d-flex align-items-center">
-                          <div className="fileUpload bg-secondary fake-shadow rounded border border-light border-2 d-flex flex-column">
+                          <div className="fileUpload color-3 fake-shadow rounded border border-light border-2 d-flex flex-column">
                             <p className='font-title text-light text-center my-2'>J'insère une photo</p>
                             <input 
                                     id="file" 
@@ -388,7 +388,7 @@ const PostAPost = () => {
                                         type="button" 
                                         value="Enregisrer mon brouillon"
                                         onClick={handleSave}
-                                        className="bg-secondary text-light border border-dark my-2 font-aside"
+                                        className="color-3 text-light border border-dark my-2 font-aside"
                           />
                           <div className="form-group">          
                             <input 
@@ -397,14 +397,14 @@ const PostAPost = () => {
                                           type="submit"
                                           
                                           value="Partager avec mes collègues"
-                                          className="bg-secondary text-light border border-dark my-2 font-aside "
+                                          className="color-3 text-light border border-dark my-2 font-aside "
                             />
                           </div>
                         </div>
                     </fieldset>
                     </form>
                     <div className="d-flex justify-content-center">
-                      <nav className="bg-secondary  my-2 px-2 py-1">
+                      <nav className="color-3  my-2 px-2 py-1">
                         <Link 
                               to="/app/upstreamflow" 
                               className="text-light font-aside text-decoration-none"

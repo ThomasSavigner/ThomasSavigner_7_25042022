@@ -82,7 +82,7 @@ function SignInTabPane() {
                                  </div>
                                  <div className="form-group d-flex flex-column align-items-center mt-4">
                                      <div className="">
-                                        <button type="submit" className="btn btn-sm btn-secondary font-title" disabled={isSubmitting}>{isSubmitting ? "Please wait..." : "Login"}</button>
+                                        <button type="submit" className="btn btn-sm color-3 font-title text-light" disabled={isSubmitting}>{isSubmitting ? "Please wait..." : "Login"}</button>
                                         {message && ( <div className="form-group">
                                                         <div className="alert alert-danger" role="alert">
                                                             {message}</div>

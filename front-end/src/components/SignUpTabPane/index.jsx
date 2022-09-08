@@ -44,7 +44,8 @@ function SignUpTabPane() {
             lastname: string().min(2, "Minimum 2 caractères").required("Requis"),
             firstname: string().min(2, "Minimum 2 caractères").required("Requis"),
             department: string().required("Requis"),
-            email: string().required("email requis").email("Veuillez entrer un email valide"),
+            email: string()/*.email("Veuillez entrer un email valide")*/.required( "email requis")
+                            .matches( /@groupomania\.fr$/, "Renseignez ici votre email Groupomania, ex: mon.email@groupomania.fr"),
             password: string().required("Requis")
                         .matches(
                             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
@@ -118,11 +119,14 @@ function SignUpTabPane() {
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm">
+                    <div className="col-md-10 mx-md-auto mt-2 input-group input-group-sm bg-secondary w-100 d-flex flex-column px-2">
                         <input id="emailinput" name="email" type="email" placeholder="email"
-                             onChange={formik.handleChange} value={formik.values.email} className="form-control w-100"/>
+                             onChange={formik.handleChange} value={formik.values.email} className="form-control my-2 w-100"/>
                         {formik.errors.email && formik.touched.email && (
                             <p className="text-danger font-title">{formik.errors.email}</p> )}
+                        <span className='font-title text-light px-2'>Utilisez ici votre email Groupomania <br/>
+                                                                ex: mon.nom@groupomania.fr
+                        </span>
                     </div>
                 </div>
                 <div className="form-group">

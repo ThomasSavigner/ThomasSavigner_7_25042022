@@ -111,7 +111,7 @@ const CommentsFormAddComment = (
                                     name="submitbutton" 
                                     type="submit" 
                                     value="Partager"
-                                    className="bg-secondary text-light border border-dark"
+                                    className="color-3  m-2 text-light border border-dark"
                                 />
                         </div>  	
                     </fieldset>

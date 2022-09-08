@@ -10,7 +10,7 @@ function Login() {
   return (
 
     <>
-
+  <div className='overflow-login-box'>
       <Container className="nav-display position-md-fixed top-md-position rounded color-3 d-flex justify-content-between border border-light border-2 p-3" fluid>
           <h1 className="fs-4 text-light">GroupoSpeak</h1>
       </Container>
@@ -30,9 +30,10 @@ function Login() {
         </div>
       </Container>
 
-      <div className="box-position box-sm-position box-md-position box-lg-position">
+      <div className="box-position box-md-position box-lg-position">
       <Tab.Container id="signInTab" defaultActiveKey="SignIn" >
-            <Col className='flex-column align-items-center'>
+          <div>
+            <Col className='d-flex flex-column align-items-center'>
                       <Nav className="w-50 px-0" variant="tabs">
                         <Nav.Item className="color-1 w-50 d-flex justify-content-center">
                           <Nav.Link eventKey="SignIn" className='text-light font-title'>Connexion</Nav.Link>
@@ -52,10 +53,11 @@ function Login() {
                         </Tab.Pane>
                       </Tab.Content>
             </Col>
+            </div>
         </Tab.Container>
 
         </div>
-
+      </div>
     </>
     
   );

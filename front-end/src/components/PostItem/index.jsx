@@ -30,7 +30,7 @@ const PostItem= (props) => {
                         
                         <img alt="user account icon" src={props.avatarUrl} className="rounded-circle avatar-width" />
                         
-                        <div className="mx-2 text-light d-flex  flex-wrap w-100">
+                        <div className="mx-2 text-dark d-flex  flex-wrap w-100">
                           <h2 className="my-0 font-title fs-5 w-100">{props.firstName} {props.lastName}</h2>
                           <p className="my-0 font-text fs-6 w-50">{props.department}</p>   
                           <p className="mb-1 w-50 text-end">article posté le {dateArticleCreatedAt}</p>
@@ -56,7 +56,7 @@ const PostItem= (props) => {
 
                       </main>
 
-                      <footer className="bg-color-3-opacity d-flex justify-content-end pt-1 border border-dark text-dark">
+                      <footer className="color-2 d-flex justify-content-end pt-1 border border-dark text-dark">
 
                         <div className="">
                         

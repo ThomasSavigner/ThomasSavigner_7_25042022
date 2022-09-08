@@ -47,7 +47,7 @@ function MyPublications() {
 
       <main className="d-flex flex-column align-items-center">
         
-        <header className="bg-secondary py-2 px-3" >
+        <header className="color-3 py-2 px-3" >
           <h2 className="font-text text-light">Mes posts</h2>
         </header>
 

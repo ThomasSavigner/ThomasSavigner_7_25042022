@@ -35,7 +35,7 @@ export default function Navbar() {
                       to="/app/upstreamflow"
                 >
                   <span className="material-icons mx-3">hub</span>
-                  <span className="d-none d-md-block">Flux posts</span>
+                  <span className="d-none d-md-block">Flux</span>
                 </NavLink>
               </li>
               <li className="nav-item li-navbar-size">

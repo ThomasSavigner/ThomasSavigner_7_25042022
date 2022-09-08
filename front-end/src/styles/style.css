@@ -8,15 +8,15 @@ main colors->
       4th : #f2f1e7
 */
 .color-1 {
-  background-color: #5c4d4d;
+  background-color: #FD2D01;
 }
 
 .color-2 {
-  background-color: #915b4a;
+  background-color: #FFD7D7;
 }
 
 .color-3 {
-  background-color: #a96851;
+  background-color: #4E5166;
 }
 
 .color-4 {
@@ -138,10 +138,11 @@ h1 {
   max-width: 100%;
 }
 .box-position {
-  width: 42em;
-  position: fixed;
-  top: 11%;
-  left: 5%;
+  width: 100%;
+  position: absolute;
+  overflow-y: scroll;
+  top: 6em;
+  
 }
 .post-hashtags-area {
   height: 3em;
@@ -178,12 +179,7 @@ h1 {
 }
 @media (min-width: 576px) {
   
-  .box-sm-position {
-    width: 42em;
-    position: fixed;
-    top: 7em;
-    left: 20%;  
-  }
+  
 
   .lockbrand-position {
     width: 50%;
@@ -194,6 +190,13 @@ h1 {
 
 @media (min-width: 768px) {
  
+  /*.box-sm-position {
+    width: 100%;
+    position: abolute;
+    top: 7em;
+    left: 0%;
+  }*/
+
   /* left & right column */
   .img-fit {
     object-fit: cover;
@@ -230,12 +233,12 @@ h1 {
     bottom: 0;
   }
 
-  .box-md-position {
+  /*.box-md-position {
     width: 42em;
     position: fixed;
     left: 14em;
     top: 10em;
-  }
+  }*/
 
   .navbar-position {
     position: static;
@@ -252,11 +255,11 @@ h1 {
     left: 0.25em;    
   }
 
-  .box-lg-position {
+  /*.box-lg-position {
     width: 50em;
     position: fixed;
     left: 20em;
-  }
+  }*/
 }
 
 @media (min-width: 1200px) {
@@ -266,11 +269,11 @@ h1 {
     left: 1em;    
   }
 
-  .box-lg-position {
+  /*.box-lg-position {
     width: 50em;
     position: fixed;
     left: 30em;
-  }
+  }*/
 }
 
 @media (min-width: 1400px) {
@@ -280,9 +283,9 @@ h1 {
     left: 2em;    
   }
 
-  .box-lg-position {
+  /*.box-lg-position {
     width: 50em;
     position: fixed;
     left: 30em;
-  }
+  }*/
 }

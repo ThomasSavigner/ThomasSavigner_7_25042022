@@ -17,7 +17,7 @@ const CommentsItem = ( props ) => {
 
         <section id={props.tagId} className="d-flex justify-content-center mt-1 mb-2">
             <div className="section-comment-position rounded color-4 border border-dark">
-                <header className="d-flex bg-color-3-opac header-comment-position mx-1 border border-dark rounded">
+                <header className="d-flex color-2 header-comment-position mx-1 border border-dark rounded">
                     <img alt="avatar" src={props.userAvatar} className="rounded-circle mx-2 my-1 avatar-comment-size"/>
                     <div className="d-flex flex-column px-1 font-aside">
                         <span> {props.userFirstName} {props.userLastName}</span>
